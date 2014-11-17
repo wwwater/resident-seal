@@ -3,6 +3,7 @@
 
 MainWindow::MainWindow()
 {
+    setWindowTitle("Abode of Seals");
     createActions();
     createMenus();
     createStatusBar();
@@ -19,9 +20,8 @@ void MainWindow::about()
 {
     QMessageBox::about(
         this,
-        "About Application",
-        "The <b>Application</b> example demonstrates how to "
-        "take care of cute seals and give them all love they need. "
+        "About Abode of Seals",
+        "This app shows how to take care of cute seals and give them all the love they need. "
         "Don't forget to caress your seal!"
     );
 }
