@@ -11,12 +11,8 @@ MainWindow::MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (1) {
-        writeSettings();
-        event->accept();
-    } else {
-        event->ignore();
-    }
+    writeSettings();
+    event->accept();
 }
 
 void MainWindow::about()
@@ -34,11 +30,9 @@ void MainWindow::createActions()
 {
     exitAct = new QAction("E&xit", this);
     exitAct->setShortcuts(QKeySequence::Quit);
-    exitAct->setStatusTip("Leave the seals");
     connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
     aboutAct = new QAction("&About", this);
-    aboutAct->setStatusTip("Show the application's About box");
     connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 }
 
