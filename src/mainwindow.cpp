@@ -23,36 +23,37 @@ void MainWindow::about()
 {
     QMessageBox::about(
         this,
-        tr("About Application"),
-        tr("The <b>Application</b> example demonstrates how to "
-           "take care of cute seals and give them all love they need. "
-           "Don't forget to caress your seal!"));
+        "About Application",
+        "The <b>Application</b> example demonstrates how to "
+        "take care of cute seals and give them all love they need. "
+        "Don't forget to caress your seal!"
+    );
 }
 
 void MainWindow::createActions()
 {
-    exitAct = new QAction(tr("E&xit"), this);
+    exitAct = new QAction("E&xit", this);
     exitAct->setShortcuts(QKeySequence::Quit);
-    exitAct->setStatusTip(tr("Leave the seals"));
+    exitAct->setStatusTip("Leave the seals");
     connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
-    aboutAct = new QAction(tr("&About"), this);
-    aboutAct->setStatusTip(tr("Show the application's About box"));
+    aboutAct = new QAction("&About", this);
+    aboutAct->setStatusTip("Show the application's About box");
     connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 }
 
 void MainWindow::createMenus()
 {
-    fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu = menuBar()->addMenu("&File");
     fileMenu->addAction(exitAct);
 
-    helpMenu = menuBar()->addMenu(tr("&Help"));
+    helpMenu = menuBar()->addMenu("&Help");
     helpMenu->addAction(aboutAct);
 }
 
 void MainWindow::createStatusBar()
 {
-    statusBar()->showMessage(tr("Ready"));
+    statusBar()->showMessage("Ready");
 }
 
 void MainWindow::readSettings()
