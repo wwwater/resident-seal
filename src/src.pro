@@ -10,3 +10,6 @@ INCLUDEPATH += .
 # Input
 HEADERS += mainwindow.h
 SOURCES += main.cpp mainwindow.cpp
+
+MOC_DIR = ../build/
+OBJECTS_DIR = ../build/
