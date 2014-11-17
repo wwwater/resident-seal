@@ -1,36 +1,35 @@
-  #ifndef MAINWINDOW_H
- #define MAINWINDOW_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
- #include <QMainWindow>
+#include <QMainWindow>
 
- class QAction;
- class QMenu;
+class QAction;
+class QMenu;
 
- class MainWindow : public QMainWindow
- {
-     Q_OBJECT
+class MainWindow: public QMainWindow
+{
+    Q_OBJECT
 
- public:
-     MainWindow();
+public:
+    MainWindow();
 
- protected:
-     void closeEvent(QCloseEvent *event);
+protected:
+    void closeEvent(QCloseEvent *event);
 
- private slots:
-     void about();
+private slots:
+    void about();
 
- private:
-     void createActions();
-     void createMenus();
-     void createStatusBar();
-     void readSettings();
-     void writeSettings();
+private:
+    void createActions();
+    void createMenus();
+    void createStatusBar();
+    void readSettings();
+    void writeSettings();
 
+    QMenu *fileMenu;
+    QMenu *helpMenu;
+    QAction *exitAct;
+    QAction *aboutAct;
+};
 
-     QMenu *fileMenu;
-     QMenu *helpMenu;
-     QAction *exitAct;
-     QAction *aboutAct;
- };
-
- #endif
+#endif // MAINWINDOW_H
