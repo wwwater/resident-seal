@@ -11,5 +11,6 @@ INCLUDEPATH += .
 HEADERS += mainwindow.h
 SOURCES += main.cpp mainwindow.cpp
 
+DESTDIR = ../bin/
 MOC_DIR = ../build/
 OBJECTS_DIR = ../build/
