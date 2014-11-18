@@ -32,7 +32,7 @@ private:
     void writeSettings();
     void setupMatrix();
     void populateScene();
-    
+
     QGraphicsScene *scene;
     QMenu *fileMenu;
     QMenu *helpMenu;

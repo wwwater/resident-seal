@@ -35,14 +35,14 @@ public slots:
     void zoomIn(int level = 1);
     void zoomOut(int level = 1);
 
-private slots:		
+private slots:
     void setupMatrix();
 
 private:
-    GraphicsView *graphicsView;    
-		QSlider *zoomSlider;
+    GraphicsView *graphicsView;
+    QSlider *zoomSlider;
 
 };
 
-#endif		
+#endif
 

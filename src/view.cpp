@@ -37,16 +37,16 @@ View::View(const QString &name, QWidget *parent)
 
     QVBoxLayout *zoomSliderLayout = new QVBoxLayout;
     zoomSliderLayout->addWidget(zoomSlider);
-    
-		
-		QGridLayout *topLayout = new QGridLayout;
-    topLayout->addWidget(graphicsView, 1, 0);    
-		topLayout->addLayout(zoomSliderLayout, 1, 1);
+
+
+    QGridLayout *topLayout = new QGridLayout;
+    topLayout->addWidget(graphicsView, 1, 0);
+    topLayout->addLayout(zoomSliderLayout, 1, 1);
     setLayout(topLayout);
 
     connect(zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(setupMatrix()));
-    
-		setupMatrix();
+
+    setupMatrix();
 }
 
 QGraphicsView *View::view() const
