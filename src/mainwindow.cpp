@@ -1,5 +1,6 @@
 #include <QtGui>
 #include "mainwindow.h"
+#include "view.h"
 
 MainWindow::MainWindow()
 {
@@ -8,6 +9,21 @@ MainWindow::MainWindow()
     createMenus();
     createStatusBar();
     readSettings();
+		
+		populateScene();
+
+
+		View *view = new View("Main view");
+    view->view()->setScene(scene);
+
+ 		QHBoxLayout *layout = new QHBoxLayout;
+    layout->addWidget(view);
+		// Set layout in QWidget
+    QWidget *window = new QWidget();
+    window->setLayout(layout);
+    // Set QWidget as the central layout of the main window
+    setCentralWidget(window);
+
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -64,4 +80,31 @@ void MainWindow::writeSettings()
     QSettings settings;
     settings.setValue("pos", pos());
     settings.setValue("size", size());
+}
+
+void MainWindow::populateScene()
+{
+    scene = new QGraphicsScene;
+/*
+    QImage image("../resources/.png");
+
+    // Populate scene
+    int xx = 0;
+    int nitems = 0;
+    for (int i = -11000; i < 11000; i += 110) {
+        ++xx;
+        int yy = 0;
+        for (int j = -7000; j < 7000; j += 70) {
+            ++yy;
+            qreal x = (i + 11000) / 22000.0;
+            qreal y = (j + 7000) / 14000.0;
+
+            QColor color(image.pixel(int(image.width() * x), int(image.height() * y)));
+            QGraphicsItem *item = new Chip(color, xx, yy);
+            item->setPos(QPointF(i, j));
+            scene->addItem(item);
+
+            ++nitems;
+        }
+    }*/
 }

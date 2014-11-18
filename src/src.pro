@@ -8,8 +8,8 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += mainwindow.h
-SOURCES += main.cpp mainwindow.cpp
+HEADERS += mainwindow.h view.h
+SOURCES += main.cpp mainwindow.cpp view.cpp
 
 DESTDIR = ../bin/
 MOC_DIR = ../build/
