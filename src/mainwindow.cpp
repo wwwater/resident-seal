@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "particle.h"
 
 MainWindow::MainWindow()
 {
@@ -77,10 +78,19 @@ void MainWindow::createGameView()
     // Disable indexing of item positions for better performance.
     gameScene->setItemIndexMethod(QGraphicsScene::NoIndex);
 
+    for (int i = 0; i < 20; i++) {
+        Particle *baby = new Particle;
+        baby->setPos(200, 150);
+        gameScene->addItem(baby);
+    }
+
     gameView = new QGraphicsView(gameScene);
     gameView->setRenderHint(QPainter::Antialiasing);
     gameView->setBackgroundBrush(Qt::black);
     gameView->setFrameShape(QFrame::NoFrame);
-
     setCentralWidget(gameView);
+
+    gameTimer = new QTimer();
+    QObject::connect(gameTimer, SIGNAL(timeout()), gameScene, SLOT(advance()));
+    gameTimer->start(16);
 }

@@ -29,6 +29,7 @@ private:
 
     QGraphicsView *gameView;
     QGraphicsScene *gameScene;
+    QTimer *gameTimer;
     QMenu *fileMenu;
     QMenu *helpMenu;
     QAction *exitAct;
