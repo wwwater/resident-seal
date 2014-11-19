@@ -1,12 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-#include <QtGui/qwidget.h>
-#include <QMainWindow>
 
-QT_FORWARD_DECLARE_CLASS(QGraphicsScene)
-QT_FORWARD_DECLARE_CLASS(QGraphicsView)
-QT_FORWARD_DECLARE_CLASS(QSlider)
-
+#include <QtGui>
 
 class QAction;
 class QMenu;
@@ -28,12 +23,12 @@ private:
     void createActions();
     void createMenus();
     void createStatusBar();
+    void createGameView();
     void readSettings();
     void writeSettings();
-    void setupMatrix();
-    void populateScene();
 
-    QGraphicsScene *scene;
+    QGraphicsView *gameView;
+    QGraphicsScene *gameScene;
     QMenu *fileMenu;
     QMenu *helpMenu;
     QAction *exitAct;

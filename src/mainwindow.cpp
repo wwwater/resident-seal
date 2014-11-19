@@ -1,29 +1,16 @@
-#include <QtGui>
 #include "mainwindow.h"
-#include "view.h"
 
 MainWindow::MainWindow()
 {
     setWindowTitle("Abode of Seals");
+    setMaximumSize(640, 480);
+    setMinimumSize(250, 250);
+
+    readSettings();
     createActions();
     createMenus();
     createStatusBar();
-    readSettings();
-
-    populateScene();
-
-
-    View *view = new View("Main view");
-    view->view()->setScene(scene);
-
-    QHBoxLayout *layout = new QHBoxLayout;
-    layout->addWidget(view);
-    // Set layout in QWidget
-    QWidget *window = new QWidget();
-    window->setLayout(layout);
-    // Set QWidget as the central layout of the main window
-    setCentralWidget(window);
-
+    createGameView();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -82,29 +69,18 @@ void MainWindow::writeSettings()
     settings.setValue("size", size());
 }
 
-void MainWindow::populateScene()
+void MainWindow::createGameView()
 {
-    scene = new QGraphicsScene;
-    /*
-        QImage image("../resources/.png");
+    gameScene = new QGraphicsScene();
+    // Scenes are infinite, but Qt can better optimize performance when the size is constrained.
+    gameScene->setSceneRect(0, 0, 400, 300);
+    // Disable indexing of item positions for better performance.
+    gameScene->setItemIndexMethod(QGraphicsScene::NoIndex);
 
-        // Populate scene
-        int xx = 0;
-        int nitems = 0;
-        for (int i = -11000; i < 11000; i += 110) {
-            ++xx;
-            int yy = 0;
-            for (int j = -7000; j < 7000; j += 70) {
-                ++yy;
-                qreal x = (i + 11000) / 22000.0;
-                qreal y = (j + 7000) / 14000.0;
+    gameView = new QGraphicsView(gameScene);
+    gameView->setRenderHint(QPainter::Antialiasing);
+    gameView->setBackgroundBrush(Qt::black);
+    gameView->setFrameShape(QFrame::NoFrame);
 
-                QColor color(image.pixel(int(image.width() * x), int(image.height() * y)));
-                QGraphicsItem *item = new Chip(color, xx, yy);
-                item->setPos(QPointF(i, j));
-                scene->addItem(item);
-
-                ++nitems;
-            }
-        }*/
+    setCentralWidget(gameView);
 }

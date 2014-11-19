@@ -1,12 +1,10 @@
 HEADERS += \
     mainwindow.h \
-    view.h \
     particle.h
 
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    view.cpp \
     particle.cpp
 
 TARGET = resident-seal 
