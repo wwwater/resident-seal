@@ -1,16 +1,21 @@
 #include "particle.h"
 #include <QPainter>
 
+Particle::Particle()
+{
+    spriteframe = qrand() % 8;
+    spritesheet = QPixmap("../resources/seal-spritesheet.png");
+}
+
 QRectF Particle::boundingRect() const
 {
-    return QRectF(-20, -20, 40, 40);
+    return QRectF(-16, -16, 32, 32);
 }
 
 void Particle::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(QColor(255, 255, 255, 200));
-    painter->drawEllipse(-20, -20, 40, 40);
+    // TODO: look into using QGraphicsPixmapItem instead of QGraphicsItem
+    painter->drawPixmap(-16, -16, spritesheet, spriteframe * 32, 0, 32, 32);
 }
 
 void Particle::advance(int step)
