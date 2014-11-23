@@ -10,8 +10,8 @@ MainWindow::MainWindow()
     readSettings();
     createActions();
     createMenus();
-    createStatusBar();
     createGameView();
+    createTimers();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -28,6 +28,12 @@ void MainWindow::about()
         "This app shows how to take care of cute seals and give them all the love they need. "
         "Don't forget to caress your seal!"
     );
+}
+
+void MainWindow::gameLoop()
+{
+    gameScene->advance();
+    statusBar()->showMessage("FPS: " + QString::number(fpsCounter->tick(), 'g', 2));
 }
 
 void MainWindow::createActions()
@@ -47,11 +53,6 @@ void MainWindow::createMenus()
 
     helpMenu = menuBar()->addMenu("&Help");
     helpMenu->addAction(aboutAct);
-}
-
-void MainWindow::createStatusBar()
-{
-    statusBar()->showMessage("Ready");
 }
 
 void MainWindow::readSettings()
@@ -89,8 +90,12 @@ void MainWindow::createGameView()
     gameView->setBackgroundBrush(Qt::black);
     gameView->setFrameShape(QFrame::NoFrame);
     setCentralWidget(gameView);
+}
 
+void MainWindow::createTimers()
+{
+    fpsCounter = new FPSCounter();
     gameTimer = new QTimer();
-    QObject::connect(gameTimer, SIGNAL(timeout()), gameScene, SLOT(advance()));
+    QObject::connect(gameTimer, SIGNAL(timeout()), this, SLOT(gameLoop()));
     gameTimer->start(16);
 }

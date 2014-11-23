@@ -1,8 +1,10 @@
 HEADERS += \
+    fps_counter.h \
     mainwindow.h \
     particle.h
 
 SOURCES += \
+    fps_counter.cpp \
     main.cpp \
     mainwindow.cpp \
     particle.cpp
