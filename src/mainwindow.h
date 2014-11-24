@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QtGui>
-#include "fps_counter.h"
+#include "performance_timer.h"
 
 class QAction;
 class QMenu;
@@ -33,7 +33,7 @@ private:
     QGraphicsView *gameView;
     QGraphicsScene *gameScene;
     QTimer *gameTimer;
-    FPSCounter *fpsCounter;
+    PerformanceTimer *framerateStopwatch;
     QMenu *fileMenu;
     QMenu *helpMenu;
     QAction *exitAct;

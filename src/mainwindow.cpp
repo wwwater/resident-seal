@@ -33,7 +33,9 @@ void MainWindow::about()
 void MainWindow::gameLoop()
 {
     gameScene->advance();
-    statusBar()->showMessage("FPS: " + QString::number(fpsCounter->tick(), 'g', 2));
+
+    framerateStopwatch->lap();
+    statusBar()->showMessage("FPS: " + framerateStopwatch->getAverageFrequencyAsString());
 }
 
 void MainWindow::createActions()
@@ -79,7 +81,7 @@ void MainWindow::createGameView()
     // Disable indexing of item positions for better performance.
     gameScene->setItemIndexMethod(QGraphicsScene::NoIndex);
 
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 200; i++) {
         Particle *baby = new Particle;
         baby->setPos(200, 150);
         gameScene->addItem(baby);
@@ -94,7 +96,9 @@ void MainWindow::createGameView()
 
 void MainWindow::createTimers()
 {
-    fpsCounter = new FPSCounter();
+    framerateStopwatch = new PerformanceTimer();
+    framerateStopwatch->start();
+
     gameTimer = new QTimer();
     QObject::connect(gameTimer, SIGNAL(timeout()), this, SLOT(gameLoop()));
     gameTimer->start(16);
