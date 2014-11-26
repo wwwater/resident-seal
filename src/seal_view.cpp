@@ -19,7 +19,6 @@ QRectF SealView::boundingRect() const
 
 void SealView::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    // TODO: look into using QGraphicsPixmapItem instead of QGraphicsItem
     painter->drawPixmap(-16, -16, *SealView::getPixmap(), direction * 32, 0, 32, 32);
 }
 
