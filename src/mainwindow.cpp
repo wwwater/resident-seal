@@ -88,7 +88,8 @@ void MainWindow::createGameView()
     }
 
     gameView = new QGraphicsView(gameScene);
-    gameView->setRenderHint(QPainter::Antialiasing);
+    gameView->setCacheMode(QGraphicsView::CacheBackground);
+    gameView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     gameView->setBackgroundBrush(Qt::black);
     gameView->setFrameShape(QFrame::NoFrame);
     setCentralWidget(gameView);

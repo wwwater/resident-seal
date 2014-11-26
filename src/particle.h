@@ -13,7 +13,9 @@ public:
 
 protected:
     void advance(int step);
-    QPixmap spritesheet;
+
+private:
+    static QPixmap *getPixmap();
     int spriteframe;
 };
 
