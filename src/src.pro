@@ -1,13 +1,13 @@
 HEADERS += \
     performance_timer.h \
     mainwindow.h \
-    particle.h
+    seal_view.h
 
 SOURCES += \
     performance_timer.cpp \
     main.cpp \
     mainwindow.cpp \
-    particle.cpp
+    seal_view.cpp
 
 QMAKE_CXXFLAGS += -std=c++11 -fdiagnostics-color=always
 

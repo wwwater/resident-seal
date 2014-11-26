@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "particle.h"
+#include "seal_view.h"
 
 MainWindow::MainWindow()
 {
@@ -82,7 +82,8 @@ void MainWindow::createGameView()
     gameScene->setItemIndexMethod(QGraphicsScene::NoIndex);
 
     for (int i = 0; i < 200; i++) {
-        Particle *baby = new Particle;
+        SealView *baby = new SealView;
+        baby->setDirection(qrand());
         baby->setPos(200, 150);
         gameScene->addItem(baby);
     }
