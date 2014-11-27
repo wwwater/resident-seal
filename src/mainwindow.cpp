@@ -1,10 +1,12 @@
 #include "mainwindow.h"
 #include "seal_view.h"
+#include "terrain_view.h"
 
 MainWindow::MainWindow()
 {
     setWindowTitle("Abode of Seals");
-    setMaximumSize(640, 480);
+    // TODO: set setMaximumSize() to the size of the map, and make the window
+    // as large as possible without exceeding desktop size.
     setMinimumSize(250, 250);
 
     readSettings();
@@ -75,16 +77,28 @@ void MainWindow::writeSettings()
 
 void MainWindow::createGameView()
 {
+    int mapRows = 20;
+    int mapCols = 32;
+    int tileSize = 32;
+
     gameScene = new QGraphicsScene();
     // Scenes are infinite, but Qt can better optimize performance when the size is constrained.
-    gameScene->setSceneRect(0, 0, 400, 300);
+    gameScene->setSceneRect(0, 0, mapCols * tileSize, mapRows * tileSize);
     // Disable indexing of item positions for better performance.
     gameScene->setItemIndexMethod(QGraphicsScene::NoIndex);
+
+    TerrainView *terrain = new TerrainView(mapRows, mapCols);
+    for (int row = 0; row < mapRows; row++) {
+        for (int col = 0; col < mapCols; col++) {
+            terrain->setTile(row, col, qrand());
+        }
+    }
+    gameScene->addItem(terrain);
 
     for (int i = 0; i < 200; i++) {
         SealView *baby = new SealView;
         baby->setDirection(qrand());
-        baby->setPos(200, 150);
+        baby->setPos(mapCols * tileSize / 2, mapRows * tileSize / 2);
         gameScene->addItem(baby);
     }
 
