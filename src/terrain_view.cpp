@@ -14,9 +14,10 @@ QRectF TerrainView::boundingRect() const
 
 void TerrainView::setTile(int row, int col, int tileIndex)
 {
+    int totalTiles = spritesheet.width() / tileSize;
     QPainter painter(&terrainImage);
     painter.drawPixmap(col * tileSize, row * tileSize, tileSize, tileSize,
-        spritesheet, (tileIndex % 160) * tileSize, 0, tileSize, tileSize);
+        spritesheet, (tileIndex % totalTiles) * tileSize, 0, tileSize, tileSize);
 }
 
 void TerrainView::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
