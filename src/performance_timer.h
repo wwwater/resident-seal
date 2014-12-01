@@ -1,7 +1,7 @@
 #ifndef PERFORMANCE_TIMER
 #define PERFORMANCE_TIMER
 
-#include <QtGui>
+#include <QtWidgets>
 
 class PerformanceTimer
 {

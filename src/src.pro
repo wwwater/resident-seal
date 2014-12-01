@@ -13,6 +13,8 @@ SOURCES += \
 
 QMAKE_CXXFLAGS += -std=c++11 -fdiagnostics-color=always
 
+QT += widgets
+
 TARGET = resident-seal 
 DEPENDPATH += .
 INCLUDEPATH += .
