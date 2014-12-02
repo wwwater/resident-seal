@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "seal_view.h"
+#include "terrain.h"
 #include "terrain_view.h"
 
 MainWindow::MainWindow()
@@ -77,8 +78,11 @@ void MainWindow::writeSettings()
 
 void MainWindow::createGameView()
 {
-    int mapRows = 20;
-    int mapCols = 32;
+    Terrain terrain;
+    terrain.loadFromFile(QString("../resources/terrain-map.json"));
+
+    int mapRows = terrain.height;
+    int mapCols = terrain.width;
     int tileSize = 32;
 
     gameScene = new QGraphicsScene();
@@ -87,13 +91,13 @@ void MainWindow::createGameView()
     // Disable indexing of item positions for better performance.
     gameScene->setItemIndexMethod(QGraphicsScene::NoIndex);
 
-    TerrainView *terrain = new TerrainView(mapRows, mapCols);
+    TerrainView *terrainView = new TerrainView(mapRows, mapCols);
     for (int row = 0; row < mapRows; row++) {
         for (int col = 0; col < mapCols; col++) {
-            terrain->setTile(row, col, qrand());
+            terrainView->setTile(row, col, qrand());
         }
     }
-    gameScene->addItem(terrain);
+    gameScene->addItem(terrainView);
 
     for (int i = 0; i < 200; i++) {
         SealView *baby = new SealView;
