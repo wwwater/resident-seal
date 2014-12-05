@@ -6,7 +6,7 @@
 class TerrainView : public QGraphicsItem
 {
 public:
-    int tileSize = 32;
+    const int tileSize = 32;
 
     TerrainView(int rows, int cols);
     QRectF boundingRect() const;

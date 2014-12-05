@@ -14,12 +14,13 @@ SealView::SealView()
 
 QRectF SealView::boundingRect() const
 {
-    return QRectF(-16, -16, 32, 32);
+    return QRectF(-tileSize/2, -tileSize/2, tileSize, tileSize);
 }
 
 void SealView::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    painter->drawPixmap(-16, -16, *SealView::getPixmap(), direction * 32, 0, 32, 32);
+    painter->drawPixmap(-tileSize/2, -tileSize/2, *SealView::getPixmap(),
+                        direction * tileSize, 0, tileSize, tileSize);
 }
 
 void SealView::advance(int step)
