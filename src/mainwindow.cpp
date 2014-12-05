@@ -80,6 +80,7 @@ void MainWindow::createGameView()
 {
     Terrain terrain;
     terrain.loadFromFile(QString("../resources/terrain-map.json"));
+    terrain.loadObstaclesFromFile(QString("../resources/terrain-obstacles.json"));
 
     int mapRows = terrain.height;
     int mapCols = terrain.width;
