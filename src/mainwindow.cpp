@@ -95,7 +95,7 @@ void MainWindow::createGameView()
     TerrainView *terrainView = new TerrainView(mapRows, mapCols);
     for (int row = 0; row < mapRows; row++) {
         for (int col = 0; col < mapCols; col++) {
-            terrainView->setTile(row, col, qrand());
+            terrainView->setTile(row, col, terrain.getTile(row, col));
         }
     }
     gameScene->addItem(terrainView);
@@ -103,7 +103,17 @@ void MainWindow::createGameView()
     for (int i = 0; i < 200; i++) {
         SealView *baby = new SealView;
         baby->setDirection(qrand());
-        baby->setPos(mapCols * tileSize / 2, mapRows * tileSize / 2);
+				std::vector <int> availableTiles; //array of non-obstacle tiles which contains indexes of these tiles
+				//idx = r * Nc + c; c = idx % Nc, r = (idx - c) / Nc 
+				for (int idx = 0; idx < mapRows * mapCols; ++idx) {
+						int c = idx % mapCols; //convert idx to column and row
+						int r = (idx - c) / mapCols;
+						if (!terrain.isObstacle(r, c)) availableTiles.push_back(idx);
+				}
+				int babyPositionIdx = qrand() % availableTiles.size();
+				int babyCol = availableTiles.at(babyPositionIdx) % mapCols; //convert idx to column and row
+				int babyRow = (availableTiles.at(babyPositionIdx) - babyCol)  / mapCols; 
+        baby->setPos(babyCol * tileSize, babyRow * tileSize);
         gameScene->addItem(baby);
     }
 
@@ -122,5 +132,5 @@ void MainWindow::createTimers()
 
     gameTimer = new QTimer();
     QObject::connect(gameTimer, SIGNAL(timeout()), this, SLOT(gameLoop()));
-    gameTimer->start(16);
+    gameTimer->start(160);
 }
