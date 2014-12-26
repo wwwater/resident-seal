@@ -8,7 +8,8 @@ Seal::Seal(int row, int col, int direction)
     this->isMoving = false;
 }
 
-void Seal::advance() {
+void Seal::advance()
+{
     if (this->isMoving) {
         int step = this->stepSize;
         if (direction % 2 == 1) {
