@@ -10,7 +10,7 @@ public:
     Terrain *terrain;
     std::vector<Seal *> seals;
 
-    World(Terrain terrain);
+    World(Terrain *terrain);
     void addSeal(Seal *seal);
     void advance();
 };

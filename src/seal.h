@@ -8,12 +8,10 @@ class Seal
     private:
         bool isMoving;
         float stepSize = 1/600; 
-    
-    protected:
-        void advance(); 
-    
+
     public:
         Seal(int, int, int); // x, y, direction
+        void advance();
         float x;
         float y;
         int direction; // [0.. 7]
