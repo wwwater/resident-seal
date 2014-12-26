@@ -1,23 +1,36 @@
-#include <seal.h>
+#include "seal.h"
 
-Seal::Seal(int row, int col, int direction) {
+Seal::Seal(int row, int col, int direction)
+{
     this->x = col + 0.5;
     this->y = row + 0.5;
     this->direction = direction;
     this->isMoving = false;
 }
-void Seal::advance() {
 
+void Seal::advance() {
     if (this->isMoving) {
         int step = this->stepSize;
-        if (direction % 2 == 1) step /= 1.4142136;
+        if (direction % 2 == 1) {
+            step /= 1.4142136;
+        }
 
         // Which one do you like more? This:
-        if (direction > 0 && direction < 4) this->x +=step;
-        if (direction > 4 && direction < 8) this->x -=step;
+        if (direction > 0 && direction < 4) {
+            this->x +=step;
+        }
 
-        if (direction > 2 && direction < 6) this->y +=step;
-        if (direction == 0 || direction == 1 || direction == 7) this->y -=step;
+        if (direction > 4 && direction < 8) {
+            this->x -=step;
+        }
+
+        if (direction > 2 && direction < 6) {
+            this->y +=step;
+        }
+
+        if (direction == 0 || direction == 1 || direction == 7) {
+            this->y -=step;
+        }
 
         /* Or this:
         switch(direction) {
@@ -53,10 +66,7 @@ void Seal::advance() {
                 this->x += -step;
                 this->y += -step;
         }*/
-    }
-    else {
+    } else {
         this->isMoving = bool(qrand() % 1);
     }
 }
-
-

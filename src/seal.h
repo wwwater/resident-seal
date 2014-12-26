@@ -1,20 +1,21 @@
 #ifndef SEAL_H
 #define SEAL_H
 
-#include <QGraphicsItem>
+#include <QtGlobal>
 
 class Seal
 {
-    private:
-        bool isMoving;
-        float stepSize = 1/600; 
+public:
+    float x;
+    float y;
+    int direction; // [0.. 7]
 
-    public:
-        Seal(int, int, int); // x, y, direction
-        void advance();
-        float x;
-        float y;
-        int direction; // [0.. 7]
+    Seal(int row, int col, int direction);
+    void advance();
+
+private:
+    bool isMoving = false;
+    float stepSize = 1 / 600;
 };
 
-#endif
+#endif // SEAL_H
