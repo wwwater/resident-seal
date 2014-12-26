@@ -1,6 +1,7 @@
 HEADERS += \
     performance_timer.h \
     mainwindow.h \
+		seal.h \
     seal_view.h \
     terrain.h \
     terrain_view.h
@@ -9,6 +10,7 @@ SOURCES += \
     performance_timer.cpp \
     main.cpp \
     mainwindow.cpp \
+		seal.cpp \
     seal_view.cpp \
     terrain.cpp \
     terrain_view.cpp

@@ -2,6 +2,7 @@
 #include "seal_view.h"
 #include "terrain.h"
 #include "terrain_view.h"
+#include "seal.h"
 
 MainWindow::MainWindow()
 {
@@ -110,12 +111,14 @@ void MainWindow::createGameView()
     }
     for (int i = 0; i < 200; i++) {
         SealView *baby = new SealView;
-        baby->setDirection(qrand());
+        int babyDirection = qrand() % 8;
+        baby->setDirection(babyDirection);
         int babyPositionIdx = qrand() % availableTiles.size();
         int babyCol = availableTiles.at(babyPositionIdx) % mapCols; //convert idx to column and row
         int babyRow = (availableTiles.at(babyPositionIdx) - babyCol)  / mapCols;
         baby->setPos(babyCol * tileSize, babyRow * tileSize);
         gameScene->addItem(baby);
+        Seal *seal = new Seal(babyRow, babyCol, babyDirection);
     }
 
     gameView = new QGraphicsView(gameScene);
