@@ -108,7 +108,7 @@ void MainWindow::createWorld()
     gameScene->addItem(terrainView);
 
     SealView *baby = new SealView(seal);
-    baby->setPos((seal->x - 0.5) * tileSize, (seal->y - 0.5) * tileSize);
+    baby->setPos(seal->x * tileSize, seal->y * tileSize);
     baby->setDirection(seal->direction);
     gameScene->addItem(baby);
 

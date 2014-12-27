@@ -27,7 +27,7 @@ void SealView::advance(int step)
 {
     Q_UNUSED(step);
     setDirection(this->seal->direction);
-    setPos((this->seal->x - 0.5) * tileSize, (this->seal->y - 0.5) * tileSize);
+    setPos(this->seal->x * tileSize, this->seal->y * tileSize);
 }
 
 void SealView::setDirection(int newDirection)
