@@ -14,7 +14,7 @@ MainWindow::MainWindow()
     readSettings();
     createActions();
     createMenus();
-    createGameView();
+    createWorld();
     createTimers();
 }
 
@@ -36,6 +36,7 @@ void MainWindow::about()
 
 void MainWindow::gameLoop()
 {
+    world->advance();
     gameScene->advance();
 
     framerateStopwatch->lap();
@@ -77,14 +78,19 @@ void MainWindow::writeSettings()
     settings.setValue("size", size());
 }
 
-void MainWindow::createGameView()
+void MainWindow::createWorld()
 {
-    Terrain terrain;
-    terrain.loadFromFile(QString("../resources/terrain-map.json"));
-    terrain.loadObstaclesFromFile(QString("../resources/terrain-obstacles.json"));
+    Terrain *terrain = new Terrain();
+    terrain->loadFromFile(QString("../resources/terrain-map.json"));
+    terrain->loadObstaclesFromFile(QString("../resources/terrain-obstacles.json"));
 
-    int mapRows = terrain.height;
-    int mapCols = terrain.width;
+    Seal *seal = new Seal(terrain->height / 2, terrain->width / 2, 0);
+
+    this->world = new World(terrain);
+    this->world->addSeal(seal);
+
+    int mapRows = terrain->height;
+    int mapCols = terrain->width;
     int tileSize = 32;
 
     gameScene = new QGraphicsScene();
@@ -96,31 +102,15 @@ void MainWindow::createGameView()
     TerrainView *terrainView = new TerrainView(mapRows, mapCols);
     for (int row = 0; row < mapRows; row++) {
         for (int col = 0; col < mapCols; col++) {
-            terrainView->setTile(row, col, terrain.getTile(row, col));
+            terrainView->setTile(row, col, terrain->getTile(row, col));
         }
     }
     gameScene->addItem(terrainView);
-		
-    //array of non-obstacle tiles which contains indexes of these tiles
-    std::vector <int> availableTiles; 
-    //idx = r * Nc + c; c = idx % Nc, r = (idx - c) / Nc
-    for (int idx = 0; idx < mapRows * mapCols; ++idx) {
-        int c = idx % mapCols; //convert idx to column and row
-        int r = (idx - c) / mapCols;
-        if (!terrain.isObstacle(r, c)) availableTiles.push_back(idx);
-    }
-    for (int i = 0; i < 200; i++) {
-        SealView *baby = new SealView;
-        int babyDirection = qrand() % 8;
-        baby->setDirection(babyDirection);
-        int babyPositionIdx = qrand() % availableTiles.size();
-        int babyCol = availableTiles.at(babyPositionIdx) % mapCols; //convert idx to column and row
-        int babyRow = (availableTiles.at(babyPositionIdx) - babyCol)  / mapCols;
-        baby->setPos(babyCol * tileSize, babyRow * tileSize);
-        gameScene->addItem(baby);
-        Seal *seal = new Seal(babyRow, babyCol, babyDirection);
-        seal->advance();
-    }
+
+    SealView *baby = new SealView;
+    baby->setPos((seal->x - 0.5) * tileSize, (seal->y - 0.5) * tileSize);
+    baby->setDirection(seal->direction);
+    gameScene->addItem(baby);
 
     gameView = new QGraphicsView(gameScene);
     gameView->setCacheMode(QGraphicsView::CacheBackground);
