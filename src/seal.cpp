@@ -14,17 +14,15 @@ Seal::Seal(int row, int col, int direction)
     this->rateRecovery = 1 + (qrand() % 5);
 }
 
-bool cellCentre(float x, float y) 
+bool isAtCellCentre(float x, float y) 
 {
-    if ((round(x * 10)  - floor(x) * 10 == 5.0) && (round(y * 10)  - floor(y) * 10 == 5.0)) {
-        return true;
-    }
-    return false;
+    return ((fabs(x - floor(x) - 0.5) < 0.05) && (fabs(y - floor(y) - 0.5) < 0.05));
 }
 
 void Seal::advance()
 {
-    if (this->tiredness >= this->maxTiredness && cellCentre(this->x, this->y)) {
+    if (this->tiredness >= this->maxTiredness && isAtCellCentre(this->x, this->y)) {
+
         this->isMoving = false;
     }
     
