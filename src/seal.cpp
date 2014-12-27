@@ -1,4 +1,5 @@
 #include "seal.h"
+#include <cmath>
 
 Seal::Seal(int row, int col, int direction)
 {
@@ -13,12 +14,26 @@ Seal::Seal(int row, int col, int direction)
     this->rateRecovery = 1 + (qrand() % 5);
 }
 
+bool cellCentre(float x, float y) 
+{
+    if ((round(x * 10)  - floor(x) * 10 == 5.0) && (round(y * 10)  - floor(y) * 10 == 5.0)) {
+        return true;
+    }
+    return false;
+}
+
 void Seal::advance()
 {
-    if (this->tiredness >= this->maxTiredness) {
+    if (this->tiredness >= this->maxTiredness && cellCentre(this->x, this->y)) {
         this->isMoving = false;
     }
+    
     if (!this->isMoving) {
+        /* // let the seal look aroung while resting. doesnt work!
+        if (qrand() % 10 == 0) {
+            this->direction = qrand() % 8;
+        }*/
+
         this->tiredness -= this->rateRecovery;
         if (this->tiredness <= minTiredness) {
             this->isMoving = bool(qrand() % 2);
@@ -85,3 +100,4 @@ void Seal::advance()
         this->tiredness += rateTiredness;
     }
 }
+
