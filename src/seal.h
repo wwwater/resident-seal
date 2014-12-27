@@ -14,8 +14,13 @@ public:
     void advance();
 
 private:
-    bool isMoving = false;
     float stepSize = 1 / 600;
+    bool isMoving = false;
+    int tiredness;
+    int maxTiredness; //these 4 should be const, be the consts must be inilialized in the list before constructor body. But it looks too cumbersome then.
+    int minTiredness;
+    int rateTiredness;
+    int rateRecovery;
 };
 
 #endif // SEAL_H

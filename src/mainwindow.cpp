@@ -119,6 +119,7 @@ void MainWindow::createGameView()
         baby->setPos(babyCol * tileSize, babyRow * tileSize);
         gameScene->addItem(baby);
         Seal *seal = new Seal(babyRow, babyCol, babyDirection);
+        seal->advance();
     }
 
     gameView = new QGraphicsView(gameScene);

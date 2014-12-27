@@ -26,7 +26,7 @@ void SealView::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
 void SealView::advance(int step)
 {
     Q_UNUSED(step);
-    moveBy(-1.0 + qrand() % 3, -1.0 + qrand() % 3);
+    //moveBy(-1.0 + qrand() % 3, -1.0 + qrand() % 3);
 }
 
 void SealView::setDirection(int newDirection)
