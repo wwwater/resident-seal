@@ -3,6 +3,8 @@
 
 int main(int argc, char *argv[])
 {
+    qsrand(time(NULL));
+
     QApplication app(argc, argv);
     app.setOrganizationName("Seal Adoration Society");
     app.setApplicationName("Abode of Seals");
