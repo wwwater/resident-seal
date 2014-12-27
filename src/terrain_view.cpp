@@ -18,6 +18,10 @@ void TerrainView::setTile(int row, int col, int tileIndex)
     QPainter painter(&terrainImage);
     painter.drawPixmap(col * tileSize, row * tileSize, tileSize, tileSize,
         spritesheet, (tileIndex % totalTiles) * tileSize, 0, tileSize, tileSize);
+
+    // Show grid for debugging purpose
+    painter.setPen(QColor(0, 0, 0, 20));
+    painter.drawRect(col * tileSize, row * tileSize, tileSize, tileSize);
 }
 
 void TerrainView::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
