@@ -7,9 +7,9 @@ QPixmap *SealView::getPixmap()
     return sprite;
 }
 
-SealView::SealView()
+SealView::SealView(Seal *seal)
 {
-
+    this->seal = seal;
 }
 
 QRectF SealView::boundingRect() const
@@ -26,7 +26,8 @@ void SealView::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
 void SealView::advance(int step)
 {
     Q_UNUSED(step);
-    //moveBy(-1.0 + qrand() % 3, -1.0 + qrand() % 3);
+    this->seal->advance();
+    setPos((this->seal->x) * tileSize, (this->seal->y) * tileSize);
 }
 
 void SealView::setDirection(int newDirection)

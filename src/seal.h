@@ -14,7 +14,7 @@ public:
     void advance();
 
 private:
-    float stepSize = 1 / 600;
+    float stepSize = 1.0 / 600.0;
     bool isMoving = false;
     int tiredness;
     int maxTiredness; //these 4 should be const, be the consts must be inilialized in the list before constructor body. But it looks too cumbersome then.

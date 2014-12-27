@@ -107,7 +107,7 @@ void MainWindow::createWorld()
     }
     gameScene->addItem(terrainView);
 
-    SealView *baby = new SealView;
+    SealView *baby = new SealView(seal);
     baby->setPos((seal->x - 0.5) * tileSize, (seal->y - 0.5) * tileSize);
     baby->setDirection(seal->direction);
     gameScene->addItem(baby);
@@ -127,5 +127,5 @@ void MainWindow::createTimers()
 
     gameTimer = new QTimer();
     QObject::connect(gameTimer, SIGNAL(timeout()), this, SLOT(gameLoop()));
-    gameTimer->start(160);
+    gameTimer->start(16);
 }

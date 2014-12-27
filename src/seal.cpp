@@ -23,10 +23,10 @@ void Seal::advance()
         this->tiredness -= this->rateRecovery;
         if (this->tiredness <= minTiredness) {
             this->direction = qrand() % 8;
-            this->isMoving = bool(qrand() % 1);
+            this->isMoving = bool(qrand() % 2);
         }
     } else {
-        int step = this->stepSize;
+        float step = this->stepSize;
         if (direction % 2 == 1) {
             step /= 1.4142136;
         }
