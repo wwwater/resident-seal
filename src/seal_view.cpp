@@ -26,8 +26,8 @@ void SealView::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidge
 void SealView::advance(int step)
 {
     Q_UNUSED(step);
-    this->seal->advance();
-    setPos((this->seal->x) * tileSize, (this->seal->y) * tileSize);
+    setDirection(this->seal->direction);
+    setPos((this->seal->x - 0.5) * tileSize, (this->seal->y - 0.5) * tileSize);
 }
 
 void SealView::setDirection(int newDirection)
