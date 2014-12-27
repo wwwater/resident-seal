@@ -7,10 +7,10 @@ Seal::Seal(int row, int col, int direction)
     this->direction = direction;
     this->isMoving = false;
     this->tiredness = 0;
-    this->maxTiredness = 550 + (qrand() % 101);
+    this->maxTiredness = 1550 + (qrand() % 101);
     this->minTiredness = 0 + (qrand() % 101);
     this->rateTiredness = 1 + (qrand() % 5);
-    this->rateRecovery = 5 + (qrand() % 11);
+    this->rateRecovery = 1 + (qrand() % 5);
 }
 
 void Seal::advance()
@@ -18,12 +18,11 @@ void Seal::advance()
     if (this->tiredness >= this->maxTiredness) {
         this->isMoving = false;
     }
-
     if (!this->isMoving) {
         this->tiredness -= this->rateRecovery;
         if (this->tiredness <= minTiredness) {
-            this->direction = qrand() % 8;
             this->isMoving = bool(qrand() % 2);
+            this->direction = qrand() % 8;
         }
     } else {
         float step = this->stepSize;
