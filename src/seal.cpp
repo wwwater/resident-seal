@@ -1,5 +1,6 @@
 #include "seal.h"
 #include "world.h"
+#include "utils.h"
 
 Seal::Seal(int row, int col, int direction)
 {
@@ -7,77 +8,73 @@ Seal::Seal(int row, int col, int direction)
     this->y = row + 0.5;
     this->direction = direction;
     this->isMoving = false;
-    this->tiredness = 0;
-    this->maxTiredness = 550 + (qrand() % 101);
-    this->minTiredness = 0 + (qrand() % 101);
-    this->rateTiredness = 1 + (qrand() % 5);
-    this->rateRecovery = 1 + (qrand() % 5);
+
+    this->fatigue      = 0;
+    this->maxFatigue   = randint(550, 650);
+    this->fatigueRate  = randint(1, 5);
+    this->recoveryRate = randint(1, 5);
 }
 
 bool Seal::isAtCellCenter()
 {
-    return std::abs(this->x - floor(this->x) - 0.5) < this->stepSize &&
-           std::abs(this->y - floor(this->y) - 0.5) < this->stepSize;
+    return std::abs(this->x - floor(this->x) - 0.5) <= 0.5 * this->stepSize &&
+           std::abs(this->y - floor(this->y) - 0.5) <= 0.5 * this->stepSize;
 }
 
 void Seal::advance()
 {
-    if (this->tiredness >= this->maxTiredness && this->isAtCellCenter()) {
+    bool wasMoving = this->isMoving;
+    int currentRow = floor(this->y);
+    int currentCol = floor(this->x);
+    int rowAhead = currentRow + Direction::intY(this->direction);
+    int colAhead = currentCol + Direction::intX(this->direction);
+
+    // Seal gets tired from walking.
+    this->fatigue = this->isMoving ?
+        this->fatigue + this->fatigueRate :
+        std::max(0, this->fatigue - this->recoveryRate);
+
+    // It always stops upon reaching the center of a cell to make sure
+    // the path ahead is clear.
+    if (this->isMoving && this->isAtCellCenter()) {
         this->isMoving = false;
         this->x = floor(this->x) + 0.5;
         this->y = floor(this->y) + 0.5;
     }
-    
+
     if (!this->isMoving) {
-        this->tiredness -= this->rateRecovery;
-        if (this->tiredness <= minTiredness) {
-            this->isMoving = bool(qrand() % 2);
-            this->direction = qrand() % 8;
-        }
-    } else {
-        float dx = 0;
-        float dy = 0;
-        float step = this->stepSize;
+        bool wantsToMove = false;
+        bool wayIsClear = !this->world->hasSealAt(rowAhead, colAhead) &&
+                          !this->world->hasObstacleAt(rowAhead, colAhead);
 
-        if (direction % 2 == 1) {
-            step /= 1.4142136;
+        // If it was moving and isn't too tired, it may decide to keep going.
+        if (wasMoving) {
+            wantsToMove = randint(0, this->maxFatigue) > this->fatigue;
         }
 
-        if (direction > 0 && direction < 4) {
-            dx = step;
+        // It may also start going after having a good rest.
+        if (this->fatigue == 0) {
+            wantsToMove = randint(0, 999) == 0;
         }
 
-        if (direction > 4 && direction < 8) {
-            dx = -step;
+        if (wantsToMove && wayIsClear) {
+            this->isMoving = true;
+            this->world->putSealAt(this, rowAhead, colAhead);
+        } else if (randint(0, 999) == 0) {
+            // If it can't or doesn't want to go, it may decide to
+            // turn left or right.
+            this->direction = Direction::rotate(this->direction, randint(-1, 1));
         }
+    }
 
-        if (direction > 2 && direction < 6) {
-            dy = step;
+    if (this->isMoving) {
+        this->x += this->stepSize * Direction::x(this->direction);
+        this->y += this->stepSize * Direction::y(this->direction);
+
+        // When crossing into a new cell, free the current one.
+        // The new cell is already reserved by this seal.
+        if (floor(this->y) != currentRow || floor(this->x) != currentCol) {
+            this->world->putSealAt(NULL, currentRow, currentCol);
         }
-
-        if (direction == 0 || direction == 1 || direction == 7) {
-            dy = -step;
-        }
-
-        // Are we about to cross into another cell?
-        int oldRow    = floor(this->y);
-        int oldCol    = floor(this->x);
-        int newRow    = floor(this->y + dy);
-        int newCol    = floor(this->x + dx);
-        bool crossing = (newRow != oldRow || newCol != oldCol);
-
-        if (crossing && this->world->hasSealAt(newRow, newCol)) {
-            // Occupied by another seal, retreat!
-            this->direction = (direction + 4) % 8;
-            dx *= -1;
-            dy *= -1;
-        } else if (crossing) {
-            this->world->putSealAt(NULL, oldRow, oldCol);
-            this->world->putSealAt(this, newRow, newCol);
-        }
-
-        this->x += dx;
-        this->y += dy;
-        this->tiredness += rateTiredness;
     }
 }

@@ -89,7 +89,12 @@ void MainWindow::createWorld()
     for (int i = -2; i <= 2; i++) {
         for (int j = -2; j <= 2; j++) {
             this->world->addSeal(
-                new Seal(terrain->height / 2 + i, terrain->width / 2 + j, 0));
+                new Seal(
+                    terrain->height / 2 + i,
+                    terrain->width / 2 + j,
+                    qrand() % 8
+                )
+            );
         }
     }
 }

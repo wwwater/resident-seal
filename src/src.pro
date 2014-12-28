@@ -5,6 +5,7 @@ HEADERS += \
     seal_view.h \
     terrain.h \
     terrain_view.h \
+    utils.h \
     world.h
 
 SOURCES += \
@@ -15,6 +16,7 @@ SOURCES += \
     seal_view.cpp \
     terrain.cpp \
     terrain_view.cpp \
+    utils.cpp \
     world.cpp
 
 QMAKE_CXXFLAGS += -std=c++11 -fdiagnostics-color=always
