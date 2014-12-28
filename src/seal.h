@@ -14,6 +14,7 @@ public:
 
     Seal(int row, int col, int direction);
     void advance();
+    bool isAtCellCenter();
 
 private:
     float stepSize = 1.0 / 60.0;
