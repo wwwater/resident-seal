@@ -87,8 +87,10 @@ void MainWindow::createWorld()
     this->world = new World(terrain);
 
     for (int i = -2; i <= 2; i++) {
-        this->world->addSeal(
-            new Seal(terrain->height / 2, terrain->width / 2 + i, 0));
+        for (int j = -2; j <= 2; j++) {
+            this->world->addSeal(
+                new Seal(terrain->height / 2 + i, terrain->width / 2 + j, 0));
+        }
     }
 }
 
