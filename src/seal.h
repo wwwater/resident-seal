@@ -3,12 +3,14 @@
 
 #include <QtGlobal>
 
+class World;
 class Seal
 {
 public:
     float x;
     float y;
     int direction; // [0.. 7]
+    World *world;
 
     Seal(int row, int col, int direction);
     void advance();
