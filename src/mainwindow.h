@@ -27,6 +27,7 @@ private:
     void createMenus();
     void createStatusBar();
     void createWorld();
+    void createWorldView();
     void createTimers();
     void readSettings();
     void writeSettings();

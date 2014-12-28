@@ -15,6 +15,7 @@ MainWindow::MainWindow()
     createActions();
     createMenus();
     createWorld();
+    createWorldView();
     createTimers();
 }
 
@@ -83,14 +84,18 @@ void MainWindow::createWorld()
     Terrain *terrain = new Terrain();
     terrain->loadFromFile(QString("../resources/terrain-map.json"));
     terrain->loadObstaclesFromFile(QString("../resources/terrain-obstacles.json"));
-
-    Seal *seal = new Seal(terrain->height / 2, terrain->width / 2, 0);
-
     this->world = new World(terrain);
-    this->world->addSeal(seal);
 
-    int mapRows = terrain->height;
-    int mapCols = terrain->width;
+    for (int i = -2; i <= 2; i++) {
+        this->world->addSeal(
+            new Seal(terrain->height / 2, terrain->width / 2 + i, 0));
+    }
+}
+
+void MainWindow::createWorldView()
+{
+    int mapRows = this->world->height;
+    int mapCols = this->world->width;
     int tileSize = 32;
 
     gameScene = new QGraphicsScene();
@@ -102,15 +107,14 @@ void MainWindow::createWorld()
     TerrainView *terrainView = new TerrainView(mapRows, mapCols);
     for (int row = 0; row < mapRows; row++) {
         for (int col = 0; col < mapCols; col++) {
-            terrainView->setTile(row, col, terrain->getTile(row, col));
+            terrainView->setTile(row, col, this->world->terrain->getTile(row, col));
         }
     }
     gameScene->addItem(terrainView);
 
-    SealView *baby = new SealView(seal);
-    baby->setPos(seal->x * tileSize, seal->y * tileSize);
-    baby->setDirection(seal->direction);
-    gameScene->addItem(baby);
+    for (std::size_t i = 0; i < this->world->seals->size(); i++) {
+        gameScene->addItem(new SealView(this->world->seals->at(i)));
+    }
 
     gameView = new QGraphicsView(gameScene);
     gameView->setCacheMode(QGraphicsView::CacheBackground);
