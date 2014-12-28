@@ -42,5 +42,5 @@ int Direction::rotate(int dir, int turns)
 
 int randint(int min, int max)
 {
-    return min + qrand() % (max - min);
+    return min + qrand() % (max + 1 - min);
 }
