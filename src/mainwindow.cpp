@@ -156,6 +156,7 @@ void MainWindow::createWorldView()
     gameScene->setItemIndexMethod(QGraphicsScene::NoIndex);
 
     TerrainView *terrainView = new TerrainView(mapRows, mapCols);
+    terrainView->showGrid = this->showGrid;
     for (int row = 0; row < mapRows; row++) {
         for (int col = 0; col < mapCols; col++) {
             terrainView->setTile(row, col, this->world->terrain->getTile(row, col));
