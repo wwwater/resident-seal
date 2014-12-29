@@ -28,7 +28,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::resizeEvent(QResizeEvent* event)
 {
     if (this->scaleToFit) {
-        /* */
+        gameView->setRenderHint(QPainter::SmoothPixmapTransform, true);
+        gameView->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
     }
     event->accept();
 }
@@ -51,6 +52,13 @@ void MainWindow::toggleGrid()
 void MainWindow::toggleScale()
 {
     this->scaleToFit = !this->scaleToFit;
+    if (this->scaleToFit) {
+        gameView->setRenderHint(QPainter::SmoothPixmapTransform, true);
+        gameView->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
+    } else {
+        gameView->setRenderHint(QPainter::SmoothPixmapTransform, false);
+        gameView->resetTransform();
+    }
 }
 
 void MainWindow::gameLoop()
