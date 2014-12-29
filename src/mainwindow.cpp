@@ -25,6 +25,14 @@ void MainWindow::closeEvent(QCloseEvent *event)
     event->accept();
 }
 
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
+    if (this->scaleToFit) {
+        /* */
+    }
+    event->accept();
+}
+
 void MainWindow::about()
 {
     QMessageBox::about(
@@ -33,6 +41,16 @@ void MainWindow::about()
         "This app shows how to take care of cute seals and give them all the love they need. "
         "Don't forget to caress your seal!"
     );
+}
+
+void MainWindow::toggleGrid()
+{
+    this->showGrid = !this->showGrid;
+}
+
+void MainWindow::toggleScale()
+{
+    this->scaleToFit = !this->scaleToFit;
 }
 
 void MainWindow::gameLoop()
@@ -52,12 +70,26 @@ void MainWindow::createActions()
 
     aboutAct = new QAction("&About", this);
     connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
+
+    toggleScaleAct = new QAction("Scale to fit", this);
+    toggleScaleAct->setCheckable(true);
+    toggleScaleAct->setChecked(this->scaleToFit);
+    connect(toggleScaleAct, SIGNAL(triggered()), this, SLOT(toggleScale()));
+
+    toggleGridAct = new QAction("Show grid", this);
+    toggleGridAct->setCheckable(true);
+    toggleGridAct->setChecked(this->showGrid);
+    connect(toggleGridAct, SIGNAL(triggered()), this, SLOT(toggleGrid()));
 }
 
 void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu("&File");
     fileMenu->addAction(exitAct);
+
+    optionsMenu = menuBar()->addMenu("&Options");
+    optionsMenu->addAction(toggleScaleAct);
+    optionsMenu->addAction(toggleGridAct);
 
     helpMenu = menuBar()->addMenu("&Help");
     helpMenu->addAction(aboutAct);
@@ -68,6 +100,8 @@ void MainWindow::readSettings()
     QSettings settings;
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     QSize size = settings.value("size", QSize(400, 400)).toSize();
+    this->showGrid = settings.value("show_grid", false).toBool();
+    this->scaleToFit = settings.value("scale_to_fit", false).toBool();
     resize(size);
     move(pos);
 }
@@ -77,6 +111,8 @@ void MainWindow::writeSettings()
     QSettings settings;
     settings.setValue("pos", pos());
     settings.setValue("size", size());
+    settings.setValue("show_grid", this->showGrid);
+    settings.setValue("scale_to_fit", this->scaleToFit);
 }
 
 void MainWindow::createWorld()

@@ -14,13 +14,18 @@ class MainWindow: public QMainWindow
 
 public:
     MainWindow();
+    bool showGrid;
+    bool scaleToFit;
 
 protected:
     void closeEvent(QCloseEvent *event);
+    void resizeEvent(QResizeEvent* event);
 
 private slots:
     void about();
     void gameLoop();
+    void toggleScale();
+    void toggleGrid();
 
 private:
     void createActions();
@@ -39,8 +44,11 @@ private:
     PerformanceTimer *framerateStopwatch;
     QMenu *fileMenu;
     QMenu *helpMenu;
+    QMenu *optionsMenu;
     QAction *exitAct;
     QAction *aboutAct;
+    QAction *toggleScaleAct;
+    QAction *toggleGridAct;
 };
 
 #endif // MAINWINDOW_H
