@@ -1,5 +1,6 @@
 #include "seal.h"
 #include "world.h"
+#include "fog.h"
 #include "utils.h"
 
 Seal::Seal(int row, int col, int direction)
@@ -77,4 +78,11 @@ void Seal::advance()
             this->world->putSealAt(NULL, currentRow, currentCol);
         }
     }
+
+    this->clearFog();
+}
+
+void Seal::clearFog()
+{
+    this->world->fog->clearTile(floor(this->y), floor(this->x));
 }

@@ -2,6 +2,7 @@
 #define WORLD_H
 
 #include "seal.h"
+#include "fog.h"
 #include "terrain.h"
 
 class World
@@ -10,6 +11,7 @@ public:
     int width;
     int height;
     Terrain *terrain;
+    Fog *fog;
     std::vector<Seal *> *seals;
     std::vector<Seal *> *seals_by_location;
 

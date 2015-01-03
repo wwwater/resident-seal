@@ -5,6 +5,7 @@ World::World(Terrain *terrain)
     this->terrain = terrain;
     this->width = terrain->width;
     this->height = terrain->height;
+    this->fog = new Fog(this);
     this->seals = new std::vector<Seal *>;
     this->seals_by_location = new std::vector<Seal *>;
     this->seals_by_location->assign(this->width * this->height, NULL);
@@ -19,6 +20,7 @@ void World::addSeal(Seal *seal)
 
 void World::advance()
 {
+    this->fog->advance();
     for (std::size_t i = 0; i < this->seals->size(); i++) {
         this->seals->at(i)->advance();
     }

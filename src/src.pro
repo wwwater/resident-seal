@@ -1,6 +1,7 @@
 HEADERS += \
-    performance_timer.h \
+    fog.h \
     mainwindow.h \
+    performance_timer.h \
 	seal.h \
     seal_view.h \
     terrain.h \
@@ -9,8 +10,9 @@ HEADERS += \
     world.h
 
 SOURCES += \
-    performance_timer.cpp \
+    fog.cpp \
     main.cpp \
+    performance_timer.cpp \
     mainwindow.cpp \
 	seal.cpp \
     seal_view.cpp \

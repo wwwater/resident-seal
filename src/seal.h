@@ -12,6 +12,7 @@ public:
 
     Seal(int row, int col, int direction);
     void advance();
+    void clearFog();
     bool isAtCellCenter();
 
 private:
