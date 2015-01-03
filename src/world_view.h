@@ -6,6 +6,7 @@
 #include "performance_timer.h"
 #include "terrain_view.h"
 #include "fog_view.h"
+#include "grid_overlay.h"
 
 class TimeableGraphicsView : public QGraphicsView
 {
@@ -40,6 +41,7 @@ private:
     QGraphicsScene *scene;
     TerrainView *terrain;
     FogView *fog;
+    GridOverlay *grid;
 };
 
 #endif // WORLD_VIEW_H

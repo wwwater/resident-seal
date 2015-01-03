@@ -15,7 +15,6 @@ WorldView::WorldView(World *world)
     this->scene->setItemIndexMethod(QGraphicsScene::NoIndex);
 
     this->terrain = new TerrainView(rows, cols);
-    this->terrain->showGrid = false;
     for (int row = 0; row < rows; row++) {
         for (int col = 0; col < cols; col++) {
             this->terrain->setTile(row, col, this->world->terrain->getTile(row, col));
@@ -29,6 +28,9 @@ WorldView::WorldView(World *world)
 
     this->fog = new FogView(this->world->fog);
     this->scene->addItem(this->fog);
+
+    this->grid = new GridOverlay(rows, cols);
+    this->scene->addItem(this->grid);
 
     this->widget = new TimeableGraphicsView(this->scene);
     this->widget->setCacheMode(QGraphicsView::CacheBackground);
@@ -67,5 +69,5 @@ void WorldView::toggleFog(bool visible)
 
 void WorldView::toggleGrid(bool visible)
 {
-    this->terrain->showGrid = visible;
+    this->grid->setVisible(visible);
 }
