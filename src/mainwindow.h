@@ -18,6 +18,7 @@ public:
     bool fogEnabled;
     bool gridEnabled;
     bool scaleToFitEnabled;
+    bool hyperspeedEnabled;
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -30,6 +31,7 @@ private slots:
     void toggleFog();
     void toggleGrid();
     void toggleScaleToFit();
+    void toggleHyperspeed();
 
 private:
     void createActions();
@@ -58,6 +60,7 @@ private:
     QAction *toggleFogAct;
     QAction *toggleGridAct;
     QAction *toggleScaleToFitAct;
+    QAction *toggleHyperspeedAct;
 };
 
 #endif // MAINWINDOW_H

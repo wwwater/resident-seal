@@ -66,10 +66,18 @@ void MainWindow::toggleScaleToFit()
     }
 }
 
+void MainWindow::toggleHyperspeed()
+{
+    this->hyperspeedEnabled = !this->hyperspeedEnabled;
+}
+
 void MainWindow::gameLoop()
 {
     modelTimer->reset();
-    world->advance();
+    int worldUpdatesPerFrame = this->hyperspeedEnabled ? 10 : 1;
+    for (int i = 0; i < worldUpdatesPerFrame; i++) {
+        world->advance();
+    }
     modelTimer->lap();
 
     viewTimer->reset();
@@ -107,6 +115,11 @@ void MainWindow::createActions()
     toggleScaleToFitAct->setCheckable(true);
     toggleScaleToFitAct->setChecked(this->scaleToFitEnabled);
     connect(toggleScaleToFitAct, SIGNAL(triggered()), this, SLOT(toggleScaleToFit()));
+
+    toggleHyperspeedAct = new QAction("10x speed", this);
+    toggleHyperspeedAct->setCheckable(true);
+    toggleHyperspeedAct->setChecked(this->hyperspeedEnabled);
+    connect(toggleHyperspeedAct, SIGNAL(triggered()), this, SLOT(toggleHyperspeed()));
 }
 
 void MainWindow::createMenus()
@@ -118,6 +131,7 @@ void MainWindow::createMenus()
     optionsMenu->addAction(toggleFogAct);
     optionsMenu->addAction(toggleGridAct);
     optionsMenu->addAction(toggleScaleToFitAct);
+    optionsMenu->addAction(toggleHyperspeedAct);
 
     helpMenu = menuBar()->addMenu("&Help");
     helpMenu->addAction(aboutAct);
@@ -131,6 +145,7 @@ void MainWindow::readSettings()
     this->fogEnabled = settings.value("show_fog", true).toBool();
     this->gridEnabled = settings.value("show_grid", false).toBool();
     this->scaleToFitEnabled = settings.value("scale_to_fit", false).toBool();
+    this->hyperspeedEnabled = settings.value("hyperspeed", false).toBool();
     resize(size);
     move(pos);
 }
@@ -143,6 +158,7 @@ void MainWindow::writeSettings()
     settings.setValue("show_fog", this->fogEnabled);
     settings.setValue("show_grid", this->gridEnabled);
     settings.setValue("scale_to_fit", this->scaleToFitEnabled);
+    settings.setValue("hyperspeed", this->hyperspeedEnabled);
 }
 
 void MainWindow::createWorld()
