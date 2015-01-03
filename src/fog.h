@@ -8,6 +8,8 @@ class Fog
 {
 public:
     World *world;
+    int worldWidth;
+    int worldHeight;
     std::vector<int> *vertices;
 
     Fog(World *world);
@@ -16,8 +18,6 @@ public:
 
 private:
     int condensationTime = 160;
-    int worldWidth;
-    int worldHeight;
 };
 
 #endif // FOG_H

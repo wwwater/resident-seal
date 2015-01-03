@@ -2,6 +2,7 @@
 #include "seal_view.h"
 #include "terrain.h"
 #include "terrain_view.h"
+#include "fog_view.h"
 #include "seal.h"
 
 MainWindow::MainWindow()
@@ -167,6 +168,9 @@ void MainWindow::createWorldView()
     for (std::size_t i = 0; i < this->world->seals->size(); i++) {
         gameScene->addItem(new SealView(this->world->seals->at(i)));
     }
+
+    FogView *fogView = new FogView(this->world->fog);
+    gameScene->addItem(fogView);
 
     gameView = new QGraphicsView(gameScene);
     gameView->setCacheMode(QGraphicsView::CacheBackground);

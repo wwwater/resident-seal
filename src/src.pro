@@ -1,5 +1,6 @@
 HEADERS += \
     fog.h \
+    fog_view.h \
     mainwindow.h \
     performance_timer.h \
 	seal.h \
@@ -11,6 +12,7 @@ HEADERS += \
 
 SOURCES += \
     fog.cpp \
+    fog_view.cpp \
     main.cpp \
     performance_timer.cpp \
     mainwindow.cpp \
