@@ -8,7 +8,8 @@ HEADERS += \
     terrain.h \
     terrain_view.h \
     utils.h \
-    world.h
+    world.h \
+    world_view.h
 
 SOURCES += \
     fog.cpp \
@@ -21,7 +22,8 @@ SOURCES += \
     terrain.cpp \
     terrain_view.cpp \
     utils.cpp \
-    world.cpp
+    world.cpp \
+    world_view.cpp
 
 QMAKE_CXXFLAGS += -std=c++11 -fdiagnostics-color=always
 

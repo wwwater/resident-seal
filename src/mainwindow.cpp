@@ -76,7 +76,8 @@ void MainWindow::gameLoop()
     statusBar()->showMessage(
         "Frame: "  + framerateStopwatch->getAverageTimeAsString() +
         " | Models: " + worldStopwatch->getAverageTimeAsString() +
-        " | Views: "  + viewStopwatch->getAverageTimeAsString());
+        " | Views: "  + viewStopwatch->getAverageTimeAsString() +
+        " | Paint: " + gameView->stopwatch.getAverageTimeAsString());
 }
 
 void MainWindow::createActions()
@@ -180,7 +181,7 @@ void MainWindow::createWorldView()
     FogView *fogView = new FogView(this->world->fog);
     gameScene->addItem(fogView);
 
-    gameView = new QGraphicsView(gameScene);
+    gameView = new WorldView(gameScene);
     gameView->setCacheMode(QGraphicsView::CacheBackground);
     gameView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     gameView->setBackgroundBrush(Qt::black);

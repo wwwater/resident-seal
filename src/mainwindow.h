@@ -4,6 +4,7 @@
 #include <QtWidgets>
 #include "performance_timer.h"
 #include "world.h"
+#include "world_view.h"
 
 class QAction;
 class QMenu;
@@ -37,7 +38,7 @@ private:
     void readSettings();
     void writeSettings();
 
-    QGraphicsView *gameView;
+    WorldView *gameView;
     QGraphicsScene *gameScene;
     World *world;
     QTimer *gameTimer;
