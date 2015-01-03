@@ -15,8 +15,9 @@ class MainWindow: public QMainWindow
 
 public:
     MainWindow();
-    bool showGrid;
-    bool scaleToFit;
+    bool fogEnabled;
+    bool gridEnabled;
+    bool scaleToFitEnabled;
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -25,8 +26,10 @@ protected:
 private slots:
     void about();
     void gameLoop();
-    void toggleScale();
+
+    void toggleFog();
     void toggleGrid();
+    void toggleScaleToFit();
 
 private:
     void createActions();
@@ -40,17 +43,21 @@ private:
 
     World *world;
     WorldView *worldView;
+
     QTimer *gameTimer;
     PerformanceTimer *framerateTimer;
     PerformanceTimer *modelTimer;
     PerformanceTimer *viewTimer;
+
     QMenu *fileMenu;
     QMenu *helpMenu;
     QMenu *optionsMenu;
+
     QAction *exitAct;
     QAction *aboutAct;
-    QAction *toggleScaleAct;
+    QAction *toggleFogAct;
     QAction *toggleGridAct;
+    QAction *toggleScaleToFitAct;
 };
 
 #endif // MAINWINDOW_H

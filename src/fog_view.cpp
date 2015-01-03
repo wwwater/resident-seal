@@ -23,9 +23,12 @@ void FogView::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget
     painter->drawPixmap(0, 0, fogImage, 0, 0, fogImage.width(), fogImage.height());
 }
 
-void FogView::advance(int step)
+void FogView::advance(int)
 {
-    Q_UNUSED(step);
+    if (!this->isVisible())
+    {
+        return;
+    }
 
     QPainter painter(&fogImage);
     int rows = this->fog->worldHeight;

@@ -30,9 +30,11 @@ public:
 
     WorldView(World *world);
     void advance();
+    QString getAveragePaintTimeAsString();
+    void toggleFog(bool visible);
+    void toggleGrid(bool visible);
     void scaleToFit();
     void resetScale();
-    QString getAveragePaintTimeAsString();
 
 private:
     QGraphicsScene *scene;

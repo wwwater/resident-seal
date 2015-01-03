@@ -59,3 +59,13 @@ QString WorldView::getAveragePaintTimeAsString()
 {
     return this->widget->stopwatch.getAverageTimeAsString();
 }
+
+void WorldView::toggleFog(bool visible)
+{
+    this->fog->setVisible(visible);
+}
+
+void WorldView::toggleGrid(bool visible)
+{
+    this->terrain->showGrid = visible;
+}

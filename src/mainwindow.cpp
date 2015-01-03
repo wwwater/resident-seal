@@ -28,7 +28,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::resizeEvent(QResizeEvent* event)
 {
-    if (this->scaleToFit) {
+    if (this->scaleToFitEnabled) {
         this->worldView->scaleToFit();
     }
     event->accept();
@@ -46,13 +46,20 @@ void MainWindow::about()
 
 void MainWindow::toggleGrid()
 {
-    this->showGrid = !this->showGrid;
+    this->gridEnabled = !this->gridEnabled;
+    this->worldView->toggleGrid(this->gridEnabled);
 }
 
-void MainWindow::toggleScale()
+void MainWindow::toggleFog()
 {
-    this->scaleToFit = !this->scaleToFit;
-    if (this->scaleToFit) {
+    this->fogEnabled = !this->fogEnabled;
+    this->worldView->toggleFog(this->fogEnabled);
+}
+
+void MainWindow::toggleScaleToFit()
+{
+    this->scaleToFitEnabled = !this->scaleToFitEnabled;
+    if (this->scaleToFitEnabled) {
         this->worldView->scaleToFit();
     } else {
         this->worldView->resetScale();
@@ -86,15 +93,20 @@ void MainWindow::createActions()
     aboutAct = new QAction("&About", this);
     connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 
-    toggleScaleAct = new QAction("Scale to fit", this);
-    toggleScaleAct->setCheckable(true);
-    toggleScaleAct->setChecked(this->scaleToFit);
-    connect(toggleScaleAct, SIGNAL(triggered()), this, SLOT(toggleScale()));
+    toggleFogAct = new QAction("Show fog", this);
+    toggleFogAct->setCheckable(true);
+    toggleFogAct->setChecked(this->fogEnabled);
+    connect(toggleFogAct, SIGNAL(triggered()), this, SLOT(toggleFog()));
 
     toggleGridAct = new QAction("Show grid", this);
     toggleGridAct->setCheckable(true);
-    toggleGridAct->setChecked(this->showGrid);
+    toggleGridAct->setChecked(this->gridEnabled);
     connect(toggleGridAct, SIGNAL(triggered()), this, SLOT(toggleGrid()));
+
+    toggleScaleToFitAct = new QAction("Scale to fit", this);
+    toggleScaleToFitAct->setCheckable(true);
+    toggleScaleToFitAct->setChecked(this->scaleToFitEnabled);
+    connect(toggleScaleToFitAct, SIGNAL(triggered()), this, SLOT(toggleScaleToFit()));
 }
 
 void MainWindow::createMenus()
@@ -103,8 +115,9 @@ void MainWindow::createMenus()
     fileMenu->addAction(exitAct);
 
     optionsMenu = menuBar()->addMenu("&Options");
-    optionsMenu->addAction(toggleScaleAct);
+    optionsMenu->addAction(toggleFogAct);
     optionsMenu->addAction(toggleGridAct);
+    optionsMenu->addAction(toggleScaleToFitAct);
 
     helpMenu = menuBar()->addMenu("&Help");
     helpMenu->addAction(aboutAct);
@@ -115,8 +128,9 @@ void MainWindow::readSettings()
     QSettings settings;
     QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
     QSize size = settings.value("size", QSize(400, 400)).toSize();
-    this->showGrid = settings.value("show_grid", false).toBool();
-    this->scaleToFit = settings.value("scale_to_fit", false).toBool();
+    this->fogEnabled = settings.value("show_fog", true).toBool();
+    this->gridEnabled = settings.value("show_grid", false).toBool();
+    this->scaleToFitEnabled = settings.value("scale_to_fit", false).toBool();
     resize(size);
     move(pos);
 }
@@ -126,8 +140,9 @@ void MainWindow::writeSettings()
     QSettings settings;
     settings.setValue("pos", pos());
     settings.setValue("size", size());
-    settings.setValue("show_grid", this->showGrid);
-    settings.setValue("scale_to_fit", this->scaleToFit);
+    settings.setValue("show_fog", this->fogEnabled);
+    settings.setValue("show_grid", this->gridEnabled);
+    settings.setValue("scale_to_fit", this->scaleToFitEnabled);
 }
 
 void MainWindow::createWorld()
@@ -153,6 +168,11 @@ void MainWindow::createWorld()
 void MainWindow::createWorldView()
 {
     this->worldView = new WorldView(this->world);
+    this->worldView->toggleFog(this->fogEnabled);
+    this->worldView->toggleGrid(this->gridEnabled);
+    if (this->scaleToFitEnabled) {
+        this->worldView->scaleToFit();
+    }
     this->setCentralWidget(this->worldView->widget);
 }
 

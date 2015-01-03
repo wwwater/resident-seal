@@ -24,10 +24,10 @@ void PerformanceTimer::lap()
 
 QString PerformanceTimer::getAverageTimeAsString()
 {
-    return QString::number(averageTime, 'f', 2) + "ms";
+    return QString::number(averageTime, 'f', 1) + "ms";
 }
 
 QString PerformanceTimer::getAverageFrequencyAsString()
 {
-    return QString::number(1000.0 / averageTime, 'f', 2);
+    return QString::number(1000.0 / averageTime, 'f', 0);
 }
