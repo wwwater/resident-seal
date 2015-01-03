@@ -29,8 +29,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::resizeEvent(QResizeEvent* event)
 {
     if (this->scaleToFit) {
-        gameView->setRenderHint(QPainter::SmoothPixmapTransform, true);
-        gameView->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
+        this->worldView->scaleToFit();
     }
     event->accept();
 }
@@ -54,30 +53,28 @@ void MainWindow::toggleScale()
 {
     this->scaleToFit = !this->scaleToFit;
     if (this->scaleToFit) {
-        gameView->setRenderHint(QPainter::SmoothPixmapTransform, true);
-        gameView->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
+        this->worldView->scaleToFit();
     } else {
-        gameView->setRenderHint(QPainter::SmoothPixmapTransform, false);
-        gameView->resetTransform();
+        this->worldView->resetScale();
     }
 }
 
 void MainWindow::gameLoop()
 {
-    worldStopwatch->reset();
+    modelTimer->reset();
     world->advance();
-    worldStopwatch->lap();
+    modelTimer->lap();
 
-    viewStopwatch->reset();
-    gameScene->advance();
-    viewStopwatch->lap();
+    viewTimer->reset();
+    worldView->advance();
+    viewTimer->lap();
 
-    framerateStopwatch->lap();
+    framerateTimer->lap();
     statusBar()->showMessage(
-        "Frame: "  + framerateStopwatch->getAverageTimeAsString() +
-        " | Models: " + worldStopwatch->getAverageTimeAsString() +
-        " | Views: "  + viewStopwatch->getAverageTimeAsString() +
-        " | Paint: " + gameView->stopwatch.getAverageTimeAsString());
+        "Frame: "     + framerateTimer->getAverageTimeAsString() +
+        " | Models: " + modelTimer->getAverageTimeAsString() +
+        " | Views: "  + viewTimer->getAverageTimeAsString() +
+        " | Paint: "  + worldView->getAveragePaintTimeAsString());
 }
 
 void MainWindow::createActions()
@@ -155,46 +152,16 @@ void MainWindow::createWorld()
 
 void MainWindow::createWorldView()
 {
-    int mapRows = this->world->height;
-    int mapCols = this->world->width;
-    int tileSize = 32;
-
-    gameScene = new QGraphicsScene();
-    // Scenes are infinite, but Qt can better optimize performance when the size is constrained.
-    gameScene->setSceneRect(0, 0, mapCols * tileSize, mapRows * tileSize);
-    // Disable indexing of item positions for better performance.
-    gameScene->setItemIndexMethod(QGraphicsScene::NoIndex);
-
-    TerrainView *terrainView = new TerrainView(mapRows, mapCols);
-    terrainView->showGrid = this->showGrid;
-    for (int row = 0; row < mapRows; row++) {
-        for (int col = 0; col < mapCols; col++) {
-            terrainView->setTile(row, col, this->world->terrain->getTile(row, col));
-        }
-    }
-    gameScene->addItem(terrainView);
-
-    for (std::size_t i = 0; i < this->world->seals->size(); i++) {
-        gameScene->addItem(new SealView(this->world->seals->at(i)));
-    }
-
-    FogView *fogView = new FogView(this->world->fog);
-    gameScene->addItem(fogView);
-
-    gameView = new WorldView(gameScene);
-    gameView->setCacheMode(QGraphicsView::CacheBackground);
-    gameView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-    gameView->setBackgroundBrush(Qt::black);
-    gameView->setFrameShape(QFrame::NoFrame);
-    setCentralWidget(gameView);
+    this->worldView = new WorldView(this->world);
+    this->setCentralWidget(this->worldView->widget);
 }
 
 void MainWindow::createTimers()
 {
-    worldStopwatch = new PerformanceTimer();
-    viewStopwatch = new PerformanceTimer();
-    framerateStopwatch = new PerformanceTimer();
-    framerateStopwatch->start();
+    modelTimer = new PerformanceTimer();
+    viewTimer = new PerformanceTimer();
+    framerateTimer = new PerformanceTimer();
+    framerateTimer->start();
 
     gameTimer = new QTimer();
     QObject::connect(gameTimer, SIGNAL(timeout()), this, SLOT(gameLoop()));

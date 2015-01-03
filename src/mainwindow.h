@@ -38,13 +38,12 @@ private:
     void readSettings();
     void writeSettings();
 
-    WorldView *gameView;
-    QGraphicsScene *gameScene;
     World *world;
+    WorldView *worldView;
     QTimer *gameTimer;
-    PerformanceTimer *framerateStopwatch;
-    PerformanceTimer *worldStopwatch;
-    PerformanceTimer *viewStopwatch;
+    PerformanceTimer *framerateTimer;
+    PerformanceTimer *modelTimer;
+    PerformanceTimer *viewTimer;
     QMenu *fileMenu;
     QMenu *helpMenu;
     QMenu *optionsMenu;
