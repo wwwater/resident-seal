@@ -11,11 +11,22 @@ Fog::Fog(World *world)
 }
 
 void Fog::clearTile(int row, int col)
-{    
+{
+    // Tile at row, col
     this->vertices->at((row + 0) * this->worldWidth + col + 0) = this->condensationTime;
     this->vertices->at((row + 0) * this->worldWidth + col + 1) = this->condensationTime;
     this->vertices->at((row + 1) * this->worldWidth + col + 0) = this->condensationTime;
     this->vertices->at((row + 1) * this->worldWidth + col + 1) = this->condensationTime;
+
+    // And 4 tiles around it
+    this->vertices->at((row - 1) * this->worldWidth + col + 0) = this->condensationTime;
+    this->vertices->at((row - 1) * this->worldWidth + col + 1) = this->condensationTime;
+    this->vertices->at((row + 0) * this->worldWidth + col - 1) = this->condensationTime;
+    this->vertices->at((row + 1) * this->worldWidth + col - 1) = this->condensationTime;
+    this->vertices->at((row + 0) * this->worldWidth + col + 2) = this->condensationTime;
+    this->vertices->at((row + 1) * this->worldWidth + col + 2) = this->condensationTime;
+    this->vertices->at((row + 2) * this->worldWidth + col + 0) = this->condensationTime;
+    this->vertices->at((row + 2) * this->worldWidth + col + 1) = this->condensationTime;
 }
 
 void Fog::advance()
