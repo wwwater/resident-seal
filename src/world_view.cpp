@@ -33,8 +33,7 @@ WorldView::WorldView(World *world)
     this->scene->addItem(this->grid);
 
     this->widget = new TimeableGraphicsView(this->scene);
-    this->widget->setCacheMode(QGraphicsView::CacheBackground);
-    this->widget->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    this->widget->setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
     this->widget->setBackgroundBrush(Qt::black);
     this->widget->setFrameShape(QFrame::NoFrame);
 }
