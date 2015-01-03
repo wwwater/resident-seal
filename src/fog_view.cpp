@@ -50,7 +50,6 @@ void FogView::advance(int step)
             }
             this->fingerprints->at(row * cols + col) = fingerprint;
 
-
             painter.eraseRect(col * tileSize, row * tileSize, tileSize, tileSize);
 
             if (black > 0) {
