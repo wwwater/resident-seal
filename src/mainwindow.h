@@ -42,6 +42,8 @@ private:
     World *world;
     QTimer *gameTimer;
     PerformanceTimer *framerateStopwatch;
+    PerformanceTimer *worldStopwatch;
+    PerformanceTimer *viewStopwatch;
     QMenu *fileMenu;
     QMenu *helpMenu;
     QMenu *optionsMenu;

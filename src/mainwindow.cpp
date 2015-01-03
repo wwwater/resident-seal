@@ -64,11 +64,19 @@ void MainWindow::toggleScale()
 
 void MainWindow::gameLoop()
 {
+    worldStopwatch->reset();
     world->advance();
+    worldStopwatch->lap();
+
+    viewStopwatch->reset();
     gameScene->advance();
+    viewStopwatch->lap();
 
     framerateStopwatch->lap();
-    statusBar()->showMessage("FPS: " + framerateStopwatch->getAverageFrequencyAsString());
+    statusBar()->showMessage(
+        "Frame: "  + framerateStopwatch->getAverageTimeAsString() +
+        " | Models: " + worldStopwatch->getAverageTimeAsString() +
+        " | Views: "  + viewStopwatch->getAverageTimeAsString());
 }
 
 void MainWindow::createActions()
@@ -182,6 +190,8 @@ void MainWindow::createWorldView()
 
 void MainWindow::createTimers()
 {
+    worldStopwatch = new PerformanceTimer();
+    viewStopwatch = new PerformanceTimer();
     framerateStopwatch = new PerformanceTimer();
     framerateStopwatch->start();
 
