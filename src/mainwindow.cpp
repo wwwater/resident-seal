@@ -172,6 +172,7 @@ void MainWindow::createWorld()
         for (int j = -2; j <= 2; j++) {
             this->world->addSeal(
                 new Seal(
+                    this->world,
                     terrain->height / 2 + i,
                     terrain->width / 2 + j,
                     qrand() % 8

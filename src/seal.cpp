@@ -3,7 +3,7 @@
 #include "fog.h"
 #include "utils.h"
 
-Seal::Seal(int row, int col, int direction)
+Seal::Seal(World *world, int row, int col, int direction)
 {
     this->x = col + 0.5;
     this->y = row + 0.5;
@@ -14,6 +14,9 @@ Seal::Seal(int row, int col, int direction)
     this->maxFatigue   = randint(550, 650);
     this->fatigueRate  = randint(1, 5);
     this->recoveryRate = randint(1, 5);
+    
+    this->world = world;
+    this->ai = new SealAI(this->world);
 }
 
 bool Seal::isAtCellCenter()
@@ -47,24 +50,20 @@ void Seal::advance()
         bool wantsToMove = false;
         bool wayIsClear = !this->world->hasSealAt(rowAhead, colAhead) &&
                           !this->world->hasObstacleAt(rowAhead, colAhead);
-
-        // If it was moving and isn't too tired, it may decide to keep going.
-        if (wasMoving) {
-            wantsToMove = randint(0, this->maxFatigue) > this->fatigue;
-        }
-
-        // It may also start going after having a good rest.
-        if (this->fatigue == 0) {
-            wantsToMove = randint(0, 999) == 0;
+        
+        if ( wayIsClear && this->ai->fianceDetected(currentRow, currentCol, this->direction)) {
+            wantsToMove = true;
+        } else {
+            wantsToMove = this->ai->wantsToMove(wasMoving, this->fatigue, this->maxFatigue); 
         }
 
         if (wantsToMove && wayIsClear) {
             this->isMoving = true;
             this->world->putSealAt(this, rowAhead, colAhead);
-        } else if (randint(0, 999) == 0) {
+        } else{
             // If it can't or doesn't want to go, it may decide to
             // turn left or right.
-            this->direction = Direction::rotate(this->direction, randint(-1, 1));
+            this->direction = this->ai->newDirection(this->direction);
         }
     }
 

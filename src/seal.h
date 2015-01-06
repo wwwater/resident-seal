@@ -1,7 +1,9 @@
 #ifndef SEAL_H
 #define SEAL_H
 
-class World;
+#include "seal_AI.h"
+
+//class World;
 class Seal
 {
 public:
@@ -10,7 +12,7 @@ public:
     int direction; // [0.. 7]
     World *world;
 
-    Seal(int row, int col, int direction);
+    Seal(World *world, int row, int col, int direction);
     void advance();
     void clearFog();
     bool isAtCellCenter();
@@ -22,6 +24,7 @@ private:
     int maxFatigue;
     int fatigueRate;
     int recoveryRate;
+    SealAI *ai;
 };
 
 #endif // SEAL_H

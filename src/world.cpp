@@ -13,7 +13,6 @@ World::World(Terrain *terrain)
 
 void World::addSeal(Seal *seal)
 {
-    seal->world = this;
     this->seals->push_back(seal);
     this->putSealAt(seal, floor(seal->y), floor(seal->x));
 }
