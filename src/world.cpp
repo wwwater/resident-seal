@@ -7,8 +7,8 @@ World::World(Terrain *terrain)
     this->height = terrain->height;
     this->fog = new Fog(this);
     this->seals = new std::vector<Seal *>;
-    this->seals_by_location = new std::vector<Seal *>;
-    this->seals_by_location->assign(this->width * this->height, NULL);
+    this->sealsByLocation = new std::vector<Seal *>;
+    this->sealsByLocation->assign(this->width * this->height, NULL);
 }
 
 void World::addSeal(Seal *seal)
@@ -28,12 +28,12 @@ void World::advance()
 
 Seal* World::getSealAt(int row, int col)
 {
-    return this->seals_by_location->at(row * this->width + col);
+    return this->sealsByLocation->at(row * this->width + col);
 }
 
 void World::putSealAt(Seal *seal, int row, int col)
 {
-    this->seals_by_location->at(row * this->width + col) = seal;
+    this->sealsByLocation->at(row * this->width + col) = seal;
 }
 
 bool World::hasSealAt(int row, int col)

@@ -33,15 +33,15 @@ void FogView::advance(int)
     QPainter painter(&fogImage);
     int rows = this->fog->worldHeight;
     int cols = this->fog->worldWidth;
-    std::vector<int> *fog_vertices = this->fog->vertices;
+    std::vector<int> *fogVertices = this->fog->vertices;
 
     for (int col = 0; col < cols; col++) {
         for (int row = 0; row < rows; row++) {
             // Tile corners: top-left, top-right, bottom-left, bottom-right
-            int a = fog_vertices->at((row + 0) * cols + col + 0);
-            int b = fog_vertices->at((row + 0) * cols + col + 1);
-            int c = fog_vertices->at((row + 1) * cols + col + 0);
-            int d = fog_vertices->at((row + 1) * cols + col + 1);
+            int a = fogVertices->at((row + 0) * cols + col + 0);
+            int b = fogVertices->at((row + 0) * cols + col + 1);
+            int c = fogVertices->at((row + 1) * cols + col + 0);
+            int d = fogVertices->at((row + 1) * cols + col + 1);
 
             // Positions of black and white part of the fog in spritesheet
             int black = (a < 1 ? 1:0) + (b < 1 ? 2:0) + (c < 1 ? 4:0) + (d < 1 ? 8:0);

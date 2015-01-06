@@ -13,7 +13,7 @@ public:
     Terrain *terrain;
     Fog *fog;
     std::vector<Seal *> *seals;
-    std::vector<Seal *> *seals_by_location;
+    std::vector<Seal *> *sealsByLocation;
 
     World(Terrain *terrain);
     void addSeal(Seal *seal);
