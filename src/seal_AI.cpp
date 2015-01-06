@@ -24,9 +24,9 @@ int SealAI::newDirection(int oldDirection)
     return oldDirection;
 }
 
-bool SealAI::fianceDetected(int row, int col, int direction)
+bool SealAI::fianceeDetected(int row, int col, int direction)
 {
-    bool fianceDetected = false;
+    bool fianceeDetected = false;
     int dirX = Direction::intX(direction);
     int dirY = Direction::intY(direction);
     int nextCol = col + dirX; 
@@ -38,7 +38,7 @@ bool SealAI::fianceDetected(int row, int col, int direction)
             if (this->world->hasSealAt(nextRow, nextCol)) { //there is another seal
                 int anotherSealDirection = this->world->getSealAt(nextRow, nextCol)->direction;  
                 if (std::abs(direction - anotherSealDirection) == 4) { //that seal is looking at me
-                    fianceDetected = true;    
+                    fianceeDetected = true;    
                 }
                 break;
             }
@@ -46,5 +46,5 @@ bool SealAI::fianceDetected(int row, int col, int direction)
             break;
         }
     }
-    return fianceDetected;
+    return fianceeDetected;
 }

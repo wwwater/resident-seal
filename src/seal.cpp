@@ -50,20 +50,24 @@ void Seal::advance()
         bool wantsToMove = false;
         bool wayIsClear = !this->world->hasSealAt(rowAhead, colAhead) &&
                           !this->world->hasObstacleAt(rowAhead, colAhead);
-        
-        if ( wayIsClear && this->ai->fianceDetected(currentRow, currentCol, this->direction)) {
-            wantsToMove = true;
-        } else {
-            wantsToMove = this->ai->wantsToMove(wasMoving, this->fatigue, this->maxFatigue); 
+        bool fianceeDetected = false;
+        if (wayIsClear) {
+            fianceeDetected = this->ai->fianceeDetected(currentRow, currentCol, this->direction); 
+            if (fianceeDetected){
+                wantsToMove = true;
+            } else {
+                wantsToMove = this->ai->wantsToMove(wasMoving, this->fatigue, this->maxFatigue); 
+            }
         }
-
+        if (!fianceeDetected) {
+            // No matter whether she can or want to go, she still may decide to
+            // turn left or right.
+            this->direction = this->ai->newDirection(this->direction);
+        }
+        
         if (wantsToMove && wayIsClear) {
             this->isMoving = true;
             this->world->putSealAt(this, rowAhead, colAhead);
-        } else{
-            // If it can't or doesn't want to go, it may decide to
-            // turn left or right.
-            this->direction = this->ai->newDirection(this->direction);
         }
     }
 

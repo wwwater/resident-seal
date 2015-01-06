@@ -3,7 +3,6 @@
 
 #include "seal_AI.h"
 
-//class World;
 class Seal
 {
 public:

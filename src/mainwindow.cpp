@@ -168,14 +168,14 @@ void MainWindow::createWorld()
     terrain->loadObstaclesFromFile(QString("../resources/terrain-obstacles.json"));
     this->world = new World(terrain);
 
-    for (int i = -2; i <= 2; i++) {
+    for (int i = -2; i <= 2; i += 4) {
         for (int j = -2; j <= 2; j++) {
             this->world->addSeal(
                 new Seal(
                     this->world,
                     terrain->height / 2 + i,
                     terrain->width / 2 + j,
-                    qrand() % 8
+                    (i + 6) % 8
                 )
             );
         }
