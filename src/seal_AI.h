@@ -9,8 +9,8 @@ public:
     SealAI(World *world, Seal *seal);
     bool wantsToMove(bool wasMoving);
     int newDirection();
-    bool fianceeDetected();
-    bool continueInThisDirection(); 
+    bool fianceeDetected(bool approach);
+    bool hasGoal(bool approach); 
     World *world;
     Seal *seal;
 };

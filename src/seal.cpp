@@ -49,7 +49,8 @@ void Seal::advance()
             this->x = floor(this->x) + 0.5;
             this->y = floor(this->y) + 0.5;
         }
-        bool onMission = this->ai->continueInThisDirection();
+        bool approachGoal = false;
+        bool onMission = this->ai->hasGoal(approachGoal);
         
         if (!onMission || !wasMoving) {
             // She can decide to change her direction
