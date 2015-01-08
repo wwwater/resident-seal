@@ -2,14 +2,17 @@
 #define SEAL_AI_H
 
 class World;
+class Seal;
 class SealAI
 {
 public:
-    SealAI(World *world);
-    bool wantsToMove(bool wasMoving, int fatigue, int maxFatigue);
-    int newDirection(int oldDirection);
-    bool fianceeDetected(int row, int col, int direction);
+    SealAI(World *world, Seal *seal);
+    bool wantsToMove(bool wasMoving);
+    int newDirection();
+    bool fianceeDetected();
+    bool continueInThisDirection(); 
     World *world;
+    Seal *seal;
 };
 
 #endif //SEAL_AI_H

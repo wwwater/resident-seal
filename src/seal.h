@@ -15,14 +15,14 @@ public:
     void advance();
     void clearFog();
     bool isAtCellCenter();
-
-private:
-    float stepSize = 1.0 / 60.0;
     bool isMoving = false;
     int fatigue;
     int maxFatigue;
     int fatigueRate;
     int recoveryRate;
+
+private:
+    float stepSize = 1.0 / 60.0;
     SealAI *ai;
 };
 
