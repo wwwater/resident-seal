@@ -6,6 +6,7 @@ World::World(Terrain *terrain)
     this->width = terrain->width;
     this->height = terrain->height;
     this->fog = new Fog(this);
+    this->debug = new Debug(this);
     this->seals = new std::vector<Seal *>;
     this->sealsByLocation = new std::vector<Seal *>;
     this->sealsByLocation->assign(this->width * this->height, NULL);
@@ -33,6 +34,12 @@ Seal* World::getSealAt(int row, int col)
 void World::putSealAt(Seal *seal, int row, int col)
 {
     this->sealsByLocation->at(row * this->width + col) = seal;
+
+    if (seal == NULL) {
+        this->debug->clearMarkerAt(row, col);
+    } else {
+        this->debug->addMarkerAt(row, col);
+    }
 }
 
 bool World::hasSealAt(int row, int col)

@@ -7,6 +7,7 @@
 #include "terrain_view.h"
 #include "fog_view.h"
 #include "grid_overlay.h"
+#include "debug_view.h"
 
 class TimeableGraphicsView : public QGraphicsView
 {
@@ -42,6 +43,7 @@ private:
     TerrainView *terrain;
     FogView *fog;
     GridOverlay *grid;
+    DebugView *debug;
 };
 
 #endif // WORLD_VIEW_H

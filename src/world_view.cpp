@@ -32,6 +32,9 @@ WorldView::WorldView(World *world)
     this->grid = new GridOverlay(rows, cols);
     this->scene->addItem(this->grid);
 
+    this->debug = new DebugView(this->world->debug);
+    this->scene->addItem(this->debug);
+
     this->widget = new TimeableGraphicsView(this->scene);
     this->widget->setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
     this->widget->setBackgroundBrush(Qt::black);

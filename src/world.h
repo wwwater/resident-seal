@@ -4,6 +4,7 @@
 #include "seal.h"
 #include "fog.h"
 #include "terrain.h"
+#include "debug.h"
 
 class World
 {
@@ -12,6 +13,7 @@ public:
     int height;
     Terrain *terrain;
     Fog *fog;
+    Debug *debug;
     std::vector<Seal *> *seals;
     std::vector<Seal *> *sealsByLocation;
 

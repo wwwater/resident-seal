@@ -1,4 +1,6 @@
 HEADERS += \
+    debug.h \
+    debug_view.h \
     fog.h \
     fog_view.h \
     grid_overlay.h \
@@ -14,6 +16,8 @@ HEADERS += \
     world_view.h
 
 SOURCES += \
+    debug.cpp \
+    debug_view.cpp \
     fog.cpp \
     fog_view.cpp \
     grid_overlay.cpp \
