@@ -49,12 +49,17 @@ void Seal::advance()
             this->x = floor(this->x) + 0.5;
             this->y = floor(this->y) + 0.5;
         }
-        bool approachGoal = false;
-        bool onMission = this->ai->hasGoal(approachGoal);
-        
-        if (!onMission || !wasMoving) {
+        //bool approachGoal = true;
+        //bool onMission = this->ai->hasGoal(approachGoal);
+        if (currentRow == this->ai->rowGoal && currentCol == this->ai->colGoal) {
+            this->ai->createGoal();
+        }
+
+        //if (!onMission || !wasMoving) {
             // She can decide to change her direction
-            this->direction = this->ai->newDirection();
+            //this->direction = this->ai->newDirection();
+        if (wasMoving) {
+            this->direction = this->ai->directionToGoal();
             rowAhead = currentRow + Direction::intY(this->direction);
             colAhead = currentCol + Direction::intX(this->direction);
         }
@@ -62,11 +67,11 @@ void Seal::advance()
         bool wayIsClear = !this->world->hasSealAt(rowAhead, colAhead) &&
                           !this->world->hasObstacleAt(rowAhead, colAhead);
         if (wayIsClear) {
-            if (onMission) {
-                this->isMoving = true;
-            } else {
+            //if (onMission) {
+              //  this->isMoving = true;
+            //} else {
                 this->isMoving = this->ai->wantsToMove(wasMoving); 
-            } 
+            //} 
         }
         if(this->isMoving) {
             this->world->putSealAt(this, rowAhead, colAhead);

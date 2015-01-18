@@ -13,6 +13,10 @@ public:
     bool hasGoal(bool approach); 
     World *world;
     Seal *seal;
+    int directionToGoal();
+    int rowGoal;
+    int colGoal;
+    void createGoal();
 };
 
 #endif //SEAL_AI_H

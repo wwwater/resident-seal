@@ -167,7 +167,7 @@ void MainWindow::createWorld()
     terrain->loadFromFile(QString("../resources/terrain-map.json"));
     terrain->loadObstaclesFromFile(QString("../resources/terrain-obstacles.json"));
     this->world = new World(terrain);
-
+    /*
     for (int i = 0, j = 5; i <= 5; i++, j--) {
         this->world->addSeal(
             new Seal(
@@ -185,7 +185,9 @@ void MainWindow::createWorld()
                 7
             )
         );
-    }
+    }*/
+    this->world->addSeal(new Seal(this->world, terrain->height / 2, terrain->width / 2, 0));
+
 }
 
 void MainWindow::createWorldView()
