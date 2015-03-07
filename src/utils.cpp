@@ -26,12 +26,12 @@ float Direction::y(int dir)
 
 int Direction::intX(int dir)
 {
-    return round(x(dir));
+    return qRound(x(dir));
 }
 
 int Direction::intY(int dir)
 {
-    return round(y(dir));
+    return qRound(y(dir));
 }
 
 int Direction::rotate(int dir, int turns)

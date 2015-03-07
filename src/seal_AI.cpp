@@ -74,7 +74,8 @@ int SealAI::directionToGoal()
     for (int r = 0; r < rows; ++r) {
         for (int c = 0; c < cols; ++c) {
             if (!this->world->hasObstacleAt(r, c) && !this->world->hasSealAt(r, c)) {
-                distToCells.emplace_hint(distToCells.end(),r * cols + c, rows+cols);
+                distToCells.insert(distToCells.end(),
+                    std::pair<int, float>(r * cols + c, rows + cols));
             }
             this->world->debug->clearMarkerAt(r, c); //remove old traces
         }

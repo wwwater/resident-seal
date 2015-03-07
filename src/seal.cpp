@@ -21,8 +21,8 @@ Seal::Seal(World *world, int row, int col, int direction)
 
 bool Seal::isAtCellCenter()
 {
-    return std::abs(this->x - floor(this->x) - 0.5) <= 0.5 * this->stepSize &&
-           std::abs(this->y - floor(this->y) - 0.5) <= 0.5 * this->stepSize;
+    return fabs(this->x - floor(this->x) - 0.5) <= 0.5 * this->stepSize &&
+           fabs(this->y - floor(this->y) - 0.5) <= 0.5 * this->stepSize;
 }
 
 void Seal::advance()

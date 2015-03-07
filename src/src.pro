@@ -44,3 +44,12 @@ INCLUDEPATH += .
 DESTDIR = ../bin/
 MOC_DIR = ../build/
 OBJECTS_DIR = ../build/
+
+# for OS X
+RESOURCES.files = ../resources/fog-spritesheet.png \
+                  ../resources/seal-spritesheet.png \
+                  ../resources/terrain-map.json \
+                  ../resources/terrain-obstacles.json \
+                  ../resources/terrain-spritesheet.png
+RESOURCES.path = Contents/Resources
+QMAKE_BUNDLE_DATA += RESOURCES
