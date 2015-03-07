@@ -11,6 +11,11 @@ SealAI::SealAI(World *world, Seal *seal): world(world), seal(seal)
     this->colGoal = int(this->seal->x);
 }
 
+SealAction SealAI::getAction()
+{
+    return SealAction::go;
+}
+
 bool SealAI::wantsToMove(bool wasMoving)
 {
     if (wasMoving) { // If it was moving and isn't too tired, it may decide to keep going.

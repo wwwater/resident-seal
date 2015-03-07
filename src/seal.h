@@ -3,6 +3,8 @@
 
 #include "seal_AI.h"
 
+enum class SealAction { go, noop, left, right };
+
 class Seal
 {
 public:
@@ -16,6 +18,8 @@ public:
     void clearFog();
     bool isAtCellCenter();
     bool isMoving = false;
+    int cooldown;
+    int cooldownDuration;
     int fatigue;
     int maxFatigue;
     int fatigueRate;

@@ -3,10 +3,12 @@
 
 class World;
 class Seal;
+enum class SealAction;
 class SealAI
 {
 public:
     SealAI(World *world, Seal *seal);
+    SealAction getAction();
     bool wantsToMove(bool wasMoving);
     int newDirection();
     bool fianceeDetected(bool approach);

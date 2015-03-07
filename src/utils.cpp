@@ -37,7 +37,7 @@ int Direction::intY(int dir)
 int Direction::rotate(int dir, int turns)
 {
     dir = (dir + turns) % 8;
-    return dir < 0 ? 7 + dir : dir;
+    return dir < 0 ? 8 + dir : dir;
 }
 
 int Direction::col(int idx, int cols)
@@ -52,13 +52,13 @@ int Direction::row(int idx, int cols)
 
 int Direction::direction(int x, int y)
 {
-    if (x ==  0 && y == -1) return 0;    
-    if (x ==  1 && y == -1) return 1;    
-    if (x ==  1 && y ==  0) return 2;    
-    if (x ==  1 && y ==  1) return 3;    
-    if (x ==  0 && y ==  1) return 4;    
-    if (x == -1 && y ==  1) return 5;    
-    if (x == -1 && y ==  0) return 6;    
+    if (x ==  0 && y == -1) return 0;
+    if (x ==  1 && y == -1) return 1;
+    if (x ==  1 && y ==  0) return 2;
+    if (x ==  1 && y ==  1) return 3;
+    if (x ==  0 && y ==  1) return 4;
+    if (x == -1 && y ==  1) return 5;
+    if (x == -1 && y ==  0) return 6;
     if (x == -1 && y == -1) return 7;
     return 0;
 }
