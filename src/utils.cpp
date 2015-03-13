@@ -1,5 +1,7 @@
 #include <QtGlobal>
 #include "utils.h"
+#include <map>
+#include <set>
 
 float Direction::x(int dir)
 {
@@ -66,4 +68,100 @@ int Direction::direction(int x, int y)
 int randint(int min, int max)
 {
     return min + qrand() % (max + 1 - min);
+}
+
+int Direction::directionToGoal(int rowStart, int colStart, int rowGoal, int colGoal,
+                            World *world, std::function<bool (int, int)> hasObstacleAt) 
+{
+    int rows = world->height;
+    int cols = world->width;
+    std::map<int, float> distToCells; //distances to the cells from the starting position
+    std::map<int, int> previousCells; //for extraction the path
+    for (int r = 0; r < rows; ++r) {
+        for (int c = 0; c < cols; ++c) {
+            if (!hasObstacleAt(r, c)) {
+                distToCells.insert(distToCells.end(), 
+                                std::pair<int, float>(r * cols + c, rows + cols));
+            }
+            world->debug->clearMarkerAt(r, c); //remove old traces
+        }
+    }
+    int idxStart = rowStart * cols + colStart;
+    int idxGoal = rowGoal * cols + colGoal;
+
+    std::set<int> cellsToVisit; //indices of cell to visit in the next iteration of the algorithm
+    std::set<int> visitedCells; //indices of cell marked as visited by algorithm
+    cellsToVisit.insert(idxStart);
+    distToCells[idxStart] = 0;
+   
+    bool stop = false;
+
+    //find short path
+    while (cellsToVisit.size() > 0) {
+        std::set<int>::iterator iter_idx(cellsToVisit.begin());
+        std::set<int> cellsForNextRound; //indices
+        while (iter_idx != cellsToVisit.end()) {
+            float thisCellDist = distToCells[*iter_idx]; //current distance until this cell
+            int row = Direction::row(*iter_idx, cols);
+            int col = Direction::col(*iter_idx, cols);
+            // 8 surrounding cells
+            for (int r = -1; r <= 1; ++r) {
+                for (int c = -1; c <= 1; ++c) {
+                    if (c != 0 || r != 0) {
+                        int nextIdx = (row+r) * cols + (col+c);
+                        if (visitedCells.find(nextIdx) == visitedCells.end() && cellsToVisit.find(nextIdx) == cellsToVisit.end()) {
+                            std::map<int, float>::iterator nextCell = distToCells.find(nextIdx); 
+                            if (nextCell != distToCells.end()) { //the cell is in distToCells thus is walkable
+                                if (nextIdx != idxGoal) {
+                                    cellsForNextRound.insert(nextIdx);
+                                } else {
+                                    stop = true; // stop the algorithms if the goal is achieved in the current iteration
+                                }
+                                float step = (c != 0 && r != 0) ? 1.414 : 1.0; // distance between two cells
+                                float newDistance = thisCellDist + step;
+                                if (nextCell->second > newDistance) {
+                                    nextCell->second = newDistance;
+                                    previousCells[nextIdx] = *iter_idx;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            ++iter_idx;
+        }
+        visitedCells.insert(cellsToVisit.begin(), cellsToVisit.end());
+        if (stop) {
+            break;
+        }
+        cellsToVisit = cellsForNextRound;
+    }
+    
+    // find the path backwards
+    int idxCell = idxGoal;
+    int nextCell = idxCell;
+
+
+    while (idxCell != idxStart) {
+            int r = Direction::row(idxCell, cols);
+            int c = Direction::col(idxCell, cols);
+            world->debug->addMarkerAt(r, c);
+        nextCell = idxCell;
+        std::map<int, int>::iterator idx_prev = previousCells.find(idxCell);
+        if (idx_prev != previousCells.end()) {
+            idxCell = idx_prev->second;
+        } else { //algorithm didnt reached the cell thus something went wrong
+            //std::cout << "Goal wasnt reached\n";
+            return 0; // goal wasnt reached
+        }
+    }
+    
+    int colNext = Direction::col(nextCell, cols);
+    int rowNext = Direction::row(nextCell, cols);
+
+
+    int x = colNext - colStart;
+    int y = rowNext - rowStart;
+    
+    return Direction::direction(x, y);    
 }
