@@ -13,7 +13,23 @@ SealAI::SealAI(World *world, Seal *seal): world(world), seal(seal)
 
 SealAction SealAI::getAction()
 {
-    return SealAction::go;
+    if ((this->seal->isMoving && (this->seal->fatigue < this->seal->maxFatigue))
+            || this->seal->fatigue == 0) {
+        if (this->rowGoal == int(this->seal->y)
+         && this->colGoal == int(this->seal->x)) {
+            if (this->seal->fatigue > 0) return SealAction::noop;
+            else this->createGoal();
+        }
+    
+        int direction = this->directionToGoal();
+        if (this->seal->direction == direction) return SealAction::go;
+        else {
+            int diff = direction - this->seal->direction;
+            if (diff < -4 || (diff >= 0 && diff < 4)) return SealAction::right;
+            return SealAction::left;
+        }
+    }    
+    return SealAction::noop;
 }
 
 bool SealAI::wantsToMove(bool wasMoving)
@@ -144,13 +160,13 @@ int SealAI::directionToGoal()
 
 
     while (idxCell != idxStart) {
+            int r = Direction::row(idxCell, cols);
+            int c = Direction::col(idxCell, cols);
+            this->world->debug->addMarkerAt(r, c);
         nextCell = idxCell;
         std::map<int, int>::iterator idx_prev = previousCells.find(idxCell);
         if (idx_prev != previousCells.end()) {
             idxCell = idx_prev->second;
-            int r = Direction::row(idxCell, cols);
-            int c = Direction::col(idxCell, cols);
-            this->world->debug->addMarkerAt(r, c);
         } else { //algorithm didnt reached the cell thus something went wrong
             std::cout << "Goal wasnt reached\n";
             return this->seal->direction; // goal wasnt reached

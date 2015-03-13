@@ -15,7 +15,7 @@ Seal::Seal(World *world, int row, int col, int direction)
     this->fatigue          = 0;
     this->maxFatigue       = randint(550, 650);
     this->fatigueRate      = randint(1, 5);
-    this->recoveryRate     = randint(1, 5);
+    this->recoveryRate     = randint(1, 3);
 
     this->world = world;
     this->ai = new SealAI(this->world, this);
@@ -35,7 +35,6 @@ void Seal::advance()
         std::max(0, this->fatigue - this->recoveryRate);
     this->cooldown = std::max(0, this->cooldown - 1);
 
-    bool wasMoving = this->isMoving;
     int rowCurrent = floor(this->y);
     int colCurrent = floor(this->x);
 
@@ -44,14 +43,13 @@ void Seal::advance()
         if (this->isMoving) {
             // It always stops upon reaching the center of a cell to make sure
             // the path ahead is clear.
-            this->isMoving = false;
             this->x = floor(this->x) + 0.5;
             this->y = floor(this->y) + 0.5;
         }
 
         SealAction action = this->ai->getAction();
         if (action == SealAction::noop) {
-            this->cooldown = wasMoving ? this->cooldownDuration : 0;
+            this->cooldown = this->isMoving ? this->cooldownDuration : 0;
         } else if (action == SealAction::left) {
             this->direction = Direction::rotate(this->direction, -1);
             this->cooldown = this->cooldownDuration;
@@ -72,6 +70,8 @@ void Seal::advance()
             this->isMoving = true;
             this->cooldown = 0;
             this->world->putSealAt(this, rowAhead, colAhead);
+        } else {
+            this->isMoving = false;
         }
     }
 
