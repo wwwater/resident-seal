@@ -25,7 +25,13 @@ SealAction SealAI::getAction()
             
             int colNext = Direction::col(nextCell, cols);
             int rowNext = Direction::row(nextCell, cols);
-            if (!this->world->hasSealAt(rowNext, colNext)) {
+            if (this->world->hasSealAt(rowNext, colNext)) {
+                for (auto cell: path) this->world->debug->clearMarkerAt(
+                                                        Direction::row(cell, cols),
+                                                        Direction::col(cell, cols));
+                this->path.clear();
+                return SealAction::noop;
+            } else {
                 int direction =  Direction::direction(colNext - col, rowNext - row);
                 if (this->seal->direction == direction) {
                     // seal moves to the next cell => remove this one from the path
@@ -36,12 +42,6 @@ SealAction SealAI::getAction()
                     if (diff < -4 || (diff >= 0 && diff < 4)) return SealAction::right;
                     return SealAction::left;
                 }
-            } else {
-                for (auto cell: path) this->world->debug->clearMarkerAt(
-                                                        Direction::row(cell, cols),
-                                                        Direction::col(cell, cols));
-                this->path.clear();
-                return SealAction::noop;
             }
         } else { 
             this->path = Direction::pathToGoal(
