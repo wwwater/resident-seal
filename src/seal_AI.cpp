@@ -1,5 +1,6 @@
 #include "seal_AI.h"
 #include "utils.h"
+#include "world.h"
 
 SealAI::SealAI(World *world, Seal *seal): world(world), seal(seal)
 {
@@ -9,26 +10,52 @@ SealAI::SealAI(World *world, Seal *seal): world(world), seal(seal)
 
 SealAction SealAI::getAction()
 {
+    int cols = this->world->width; 
+    int col = int(this->seal->x);
+    int row = int(this->seal->y);
+
     if ((this->seal->isMoving && (this->seal->fatigue < this->seal->maxFatigue))
-            || this->seal->fatigue == 0) {
-        if (this->rowGoal == int(this->seal->y)
-         && this->colGoal == int(this->seal->x)) {
+      || this->seal->fatigue == 0) {
+        if (this->rowGoal == row && this->colGoal == col) {
             if (this->seal->fatigue > 0) return SealAction::noop;
             else this->createGoal();
         }
-    
-        int direction = Direction::directionToGoal(int(this->seal->y), int(this->seal->x),
+        if (this->path.size() > 0) {
+            int nextCell = this->path.back();
+            
+            int colNext = Direction::col(nextCell, cols);
+            int rowNext = Direction::row(nextCell, cols);
+            if (!this->world->hasSealAt(rowNext, colNext)) {
+                int direction =  Direction::direction(colNext - col, rowNext - row);
+                if (this->seal->direction == direction) {
+                    // seal moves to the next cell => remove this one from the path
+                    this->path.pop_back();
+                    return SealAction::go;
+                } else {
+                    int diff = direction - this->seal->direction;
+                    if (diff < -4 || (diff >= 0 && diff < 4)) return SealAction::right;
+                    return SealAction::left;
+                }
+            } else {
+                for (auto cell: path) this->world->debug->clearMarkerAt(
+                                                        Direction::row(cell, cols),
+                                                        Direction::col(cell, cols));
+                this->path.clear();
+                return SealAction::noop;
+            }
+        } else { 
+            this->path = Direction::pathToGoal(
+                                    this->world->height, this->world->width,
+                                    row, col,
                                     this->rowGoal, this->colGoal,
-                                    this->world,
                                     [this](int row, int col)
                                     {return (this->world->hasObstacleAt(row, col)
                                           || this->world->hasSealAt(row, col));}
                                     );
-        if (this->seal->direction == direction) return SealAction::go;
-        else {
-            int diff = direction - this->seal->direction;
-            if (diff < -4 || (diff >= 0 && diff < 4)) return SealAction::right;
-            return SealAction::left;
+            for (auto cell: path) this->world->debug->addMarkerAt(
+                                                        Direction::row(cell, cols),
+                                                        Direction::col(cell, cols));
+            return SealAction::noop;
         }
     }    
     return SealAction::noop;
@@ -65,7 +92,8 @@ bool SealAI::fianceeDetected(bool approach)
         if (!this->world->hasObstacleAt(nextRow, nextCol)) { // there is no obstacle
             if (this->world->hasSealAt(nextRow, nextCol)) { //there is another seal
                 int anotherSealDirection = this->world->getSealAt(nextRow, nextCol)->direction;  
-                if (std::abs(this->seal->direction - anotherSealDirection) != 400) { //that seal is looking at me
+                //that seal is looking at me
+                if (std::abs(this->seal->direction - anotherSealDirection) != 400) {
                     fianceeDetected = true;
                     if (!approach) {
                         this->seal->direction = (this->seal->direction + 4) % 8;

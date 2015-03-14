@@ -1,5 +1,6 @@
 #include <functional>
-#include <world.h>
+//#include <world.h>
+#include <vector>
 class Direction
 {
 public:
@@ -11,9 +12,9 @@ public:
     static int col(int idx, int cols);
     static int row(int idx, int cols);
     static int direction(int x, int y);
-    static int directionToGoal(int rowStart, int colStart, 
+    static std::vector<int> pathToGoal(int rows, int cols,
+                               int rowStart, int colStart, 
                                int rowGoal, int colGoal,
-                               World *world, 
                                std::function<bool (int, int)> hasObstacleAt);
 };
 
