@@ -14,63 +14,85 @@ SealAction SealAI::getAction()
     int col = int(this->seal->x);
     int row = int(this->seal->y);
 
-    if ((this->seal->isMoving && (this->seal->fatigue < this->seal->maxFatigue))
-      || this->seal->fatigue == 0) {
-        if (this->rowGoal == row && this->colGoal == col) {
-            if (this->seal->fatigue > 0) return SealAction::noop;
-            else this->createGoal();
+    // TODO: use wantsToMove()
+    bool movingAndNotTooTired = this->seal->isMoving &&
+        this->seal->fatigue < this->seal->maxFatigue;
+
+    if (this->seal->fatigue == 0 || movingAndNotTooTired) {
+        if (row == this->rowGoal && col == this->colGoal) {
+            if (this->seal->fatigue > 0) {
+                return SealAction::noop;
+            } else {
+                this->createGoal();
+            }
         }
         if (this->path.size() > 0) {
             int nextCell = this->path.back();
-            
+
             int colNext = Direction::col(nextCell, cols);
             int rowNext = Direction::row(nextCell, cols);
             if (this->world->hasSealAt(rowNext, colNext)) {
-                for (auto cell: path) this->world->debug->clearMarkerAt(
-                                                        Direction::row(cell, cols),
-                                                        Direction::col(cell, cols));
+                for (auto cell: path) {
+                    this->world->debug->clearMarkerAt(
+                        Direction::row(cell, cols),
+                        Direction::col(cell, cols)
+                    );
+                }
                 this->path.clear();
                 return SealAction::noop;
             } else {
-                int direction =  Direction::direction(colNext - col, rowNext - row);
+                int direction = Direction::direction(
+                    colNext - col, rowNext - row
+                );
                 if (this->seal->direction == direction) {
-                    // seal moves to the next cell => remove this one from the path
+                    // Follow the path
                     this->path.pop_back();
                     return SealAction::go;
                 } else {
+                    // Rotate to face the path direction.
+                    // TODO: create a function in Direction that takes two
+                    // directions and tells which way to turn.
                     int diff = direction - this->seal->direction;
-                    if (diff < -4 || (diff >= 0 && diff < 4)) return SealAction::right;
-                    return SealAction::left;
+                    if (diff < -4 || (diff >= 0 && diff < 4)) {
+                        return SealAction::right;
+                    } else {
+                        return SealAction::left;
+                    }
                 }
             }
         } else { 
             this->path = Direction::pathToGoal(
-                                    this->world->height, this->world->width,
-                                    row, col,
-                                    this->rowGoal, this->colGoal,
-                                    [this](int row, int col)
-                                    {return (this->world->hasObstacleAt(row, col)
-                                          || this->world->hasSealAt(row, col));}
-                                    );
-            for (auto cell: path) this->world->debug->addMarkerAt(
-                                                        Direction::row(cell, cols),
-                                                        Direction::col(cell, cols));
+                this->world->height, this->world->width,
+                row, col,
+                this->rowGoal, this->colGoal,
+                [this](int row, int col) {
+                    return this->world->hasObstacleAt(row, col) ||
+                           this->world->hasSealAt(row, col);
+                }
+            );
+            for (auto cell: path) {
+                this->world->debug->addMarkerAt(Direction::row(cell, cols),
+                                                Direction::col(cell, cols));
+            }
             return SealAction::noop;
         }
-    }    
+    }
     return SealAction::noop;
 }
 
 bool SealAI::wantsToMove(bool wasMoving)
 {
-    if (wasMoving) { // If it was moving and isn't too tired, it may decide to keep going.
+    if (wasMoving) {
+        // If it was moving and isn't too tired, it may decide to keep going.
         return randint(0, this->seal->maxFatigue) > this->seal->fatigue;
-    } else if (this->seal->fatigue == 0) {  // He may also start going after he is completely recovered.
+    } else if (this->seal->fatigue == 0) {
+        // He may also start going after he is completely recovered.
         return randint(0, this->seal->maxFatigue) == 0;
     }
     return false;
 } 
 
+// TODO: this is unused, remove?
 int SealAI::newDirection()
 { 
     if (randint(0, 999) == 0) { 
@@ -120,7 +142,10 @@ void SealAI::createGoal()
     std::vector<int> availableCells;
     for (int row = 0; row < rows; ++ row) {
         for (int col = 0; col < cols; ++col) {
-            if (!this->world->hasObstacleAt(row, col) && !this->world->hasSealAt(row, col)) {
+            // TODO: Seal class should have a method canStepOn(row, col)
+            // that encapsulates this.
+            if (!this->world->hasObstacleAt(row, col) &&
+                    !this->world->hasSealAt(row, col)) {
                 availableCells.push_back(row * cols + col);
             }    
         }
