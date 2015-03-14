@@ -12,7 +12,7 @@ public:
     SealAI(World *world, Seal *seal);
     SealAction getAction();
 private:
-    bool wantsToMove(bool wasMoving);
+    bool wantsToMove();
     int newDirection();
     bool fianceeDetected(bool approach);
     bool hasGoal(bool approach); 

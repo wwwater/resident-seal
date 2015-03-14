@@ -163,9 +163,9 @@ std::vector<std::pair<int, int>> Direction::pathToGoal(int rows, int cols,
     return path;
 }
 
-int Direction::turnDirection(int directionSeal, int directionGoal)
+int Direction::turnDirection(int directionIs, int directionToBe)
 {
-    int diff = directionGoal - directionSeal;
+    int diff = directionToBe - directionIs;
     if (diff == 0) return 0;
     else if (diff < -4 || (diff > 0 && diff < 4)) return 1;
     return -1;

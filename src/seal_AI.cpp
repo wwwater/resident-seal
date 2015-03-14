@@ -13,9 +13,7 @@ SealAction SealAI::getAction()
     int col = int(this->seal->x);
     int row = int(this->seal->y);
 
-    bool willBeMoving = wantsToMove(this->seal->isMoving);
-
-    if (willBeMoving) {
+    if (this->wantsToMove()) {
         if (row == this->rowGoal && col == this->colGoal) {
             if (this->seal->fatigue > 0) {
                 return SealAction::noop;
@@ -44,9 +42,8 @@ SealAction SealAI::getAction()
                     return SealAction::go;
                 } else if (turn == 1) { // Rotate to face the path direction.
                     return SealAction::right;
-                } else {
-                    return SealAction::left;
                 }
+                return SealAction::left;
             }
         } else { 
             this->path = Direction::pathToGoal(
@@ -67,9 +64,9 @@ SealAction SealAI::getAction()
     return SealAction::noop;
 }
 
-bool SealAI::wantsToMove(bool wasMoving)
+bool SealAI::wantsToMove()
 {
-    if (wasMoving) {
+    if (this->seal->isMoving) {
         // If it was moving and isn't too tired, it may decide to keep going.
         return randint(0, this->seal->maxFatigue) > this->seal->fatigue;
     } else if (this->seal->fatigue == 0) {

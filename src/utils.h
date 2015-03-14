@@ -15,7 +15,7 @@ public:
                                int rowStart, int colStart, 
                                int rowGoal, int colGoal,
                                std::function<bool (int, int)> hasObstacleAt);
-    static int turnDirection(int directionSeal, int directionGoal);
+    static int turnDirection(int directionIs, int directionToBe);
 };
 
 int randint(int min, int max);
