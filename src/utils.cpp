@@ -70,11 +70,12 @@ int randint(int min, int max)
     return min + qrand() % (max + 1 - min);
 }
 
-std::vector<int> Direction::pathToGoal(int rows, int cols, 
+std::vector<std::pair<int, int>> Direction::pathToGoal(int rows, int cols, 
                                int rowStart, int colStart, int rowGoal, int colGoal,
                                std::function<bool (int, int)> hasObstacleAt) 
 {
-    std::map<int, float> distToCells; //distances to the cells from the starting position
+    //distances to the cells from the starting position
+    std::map<int, float> distToCells;
     std::map<int, int> previousCells; //for extraction the path
     for (int r = 0; r < rows; ++r) {
         for (int c = 0; c < cols; ++c) {
@@ -87,8 +88,10 @@ std::vector<int> Direction::pathToGoal(int rows, int cols,
     int idxStart = rowStart * cols + colStart;
     int idxGoal = rowGoal * cols + colGoal;
 
-    std::set<int> cellsToVisit; //indices of cell to visit in the next iteration of the algorithm
-    std::set<int> visitedCells; //indices of cell marked as visited by algorithm
+    //indices of cell to visit in the next iteration of the algorithm
+    std::set<int> cellsToVisit; 
+    //indices of cell marked as visited by algorithm
+    std::set<int> visitedCells;
     cellsToVisit.insert(idxStart);
     distToCells[idxStart] = 0;
    
@@ -99,7 +102,8 @@ std::vector<int> Direction::pathToGoal(int rows, int cols,
         std::set<int>::iterator iter_idx(cellsToVisit.begin());
         std::set<int> cellsForNextRound; //indices
         while (iter_idx != cellsToVisit.end()) {
-            float thisCellDist = distToCells[*iter_idx]; //current distance until this cell
+             //current distance until this cell
+            float thisCellDist = distToCells[*iter_idx];
             int row = Direction::row(*iter_idx, cols);
             int col = Direction::col(*iter_idx, cols);
             // 8 surrounding cells
@@ -107,15 +111,20 @@ std::vector<int> Direction::pathToGoal(int rows, int cols,
                 for (int c = -1; c <= 1; ++c) {
                     if (c != 0 || r != 0) {
                         int nextIdx = (row+r) * cols + (col+c);
-                        if (visitedCells.find(nextIdx) == visitedCells.end() && cellsToVisit.find(nextIdx) == cellsToVisit.end()) {
-                            std::map<int, float>::iterator nextCell = distToCells.find(nextIdx); 
-                            if (nextCell != distToCells.end()) { //the cell is in distToCells thus is walkable
+                        if (visitedCells.find(nextIdx) == visitedCells.end()
+                         && cellsToVisit.find(nextIdx) == cellsToVisit.end()) {
+                            std::map<int, float>::iterator nextCell = 
+                                distToCells.find(nextIdx);
+                            //the cell is in distToCells thus is walkable
+                            if (nextCell != distToCells.end()) {
                                 if (nextIdx != idxGoal) {
                                     cellsForNextRound.insert(nextIdx);
                                 } else {
-                                    stop = true; // stop the algorithms if the goal is achieved in the current iteration
+                                    // stop the algorithms in the current iteration
+                                    stop = true;
                                 }
-                                float step = (c != 0 && r != 0) ? 1.414 : 1.0; // distance between two cells
+                                // distance between two cells
+                                float step = (c != 0 && r != 0) ? 1.414 : 1.0;
                                 float newDistance = thisCellDist + step;
                                 if (nextCell->second > newDistance) {
                                     nextCell->second = newDistance;
@@ -137,17 +146,27 @@ std::vector<int> Direction::pathToGoal(int rows, int cols,
     
     // find the path backwards
     int idxCell = idxGoal;
-    std::vector<int> path;
+    std::vector<std::pair<int, int>> path;
 
     while (idxCell != idxStart) {
-        path.push_back(idxCell);
+        int row = Direction::row(idxCell, cols);
+        int col = Direction::col(idxCell, cols);
+        path.push_back(std::make_pair(row, col));
         std::map<int, int>::iterator idx_prev = previousCells.find(idxCell);
         if (idx_prev != previousCells.end()) {
             idxCell = idx_prev->second;
         } else { //algorithm didnt reached the cell thus something went wrong
-            std::vector<int> zero; // goal wasnt reached
+            std::vector<std::pair<int, int>> zero; // goal wasnt reached
             return zero;
         }
     }
     return path;
+}
+
+int Direction::turnDirection(int directionSeal, int directionGoal)
+{
+    int diff = directionGoal - directionSeal;
+    if (diff == 0) return 0;
+    else if (diff < -4 || (diff > 0 && diff < 4)) return 1;
+    return -1;
 }

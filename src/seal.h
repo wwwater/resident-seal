@@ -16,6 +16,7 @@ public:
     Seal(World *world, int row, int col, int direction);
     void advance();
     void clearFog();
+    bool canStepOn(int row, int col);
     bool isAtCellCenter();
     bool isMoving = false;
     int cooldown;

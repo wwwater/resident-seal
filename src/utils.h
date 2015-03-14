@@ -11,10 +11,11 @@ public:
     static int col(int idx, int cols);
     static int row(int idx, int cols);
     static int direction(int x, int y);
-    static std::vector<int> pathToGoal(int rows, int cols,
+    static std::vector<std::pair<int, int>> pathToGoal(int rows, int cols,
                                int rowStart, int colStart, 
                                int rowGoal, int colGoal,
                                std::function<bool (int, int)> hasObstacleAt);
+    static int turnDirection(int directionSeal, int directionGoal);
 };
 
 int randint(int min, int max);

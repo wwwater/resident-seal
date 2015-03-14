@@ -94,3 +94,9 @@ void Seal::clearFog()
 {
     this->world->fog->clearTile(floor(this->y), floor(this->x));
 }
+
+bool Seal::canStepOn(int row, int col)
+{
+    return (!this->world->hasObstacleAt(row, col)
+        && !this->world->hasSealAt(row, col));
+}

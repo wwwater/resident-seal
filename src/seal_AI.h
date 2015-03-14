@@ -19,7 +19,7 @@ private:
     World *world;
     Seal *seal;
     int pathToGoal();
-    std::vector<int> path;
+    std::vector<std::pair<int, int>> path;
     int rowGoal;
     int colGoal;
     void createGoal();
