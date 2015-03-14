@@ -2,7 +2,6 @@
 #include "utils.h"
 #include <map>
 #include <set>
-//#include <vector>
 
 float Direction::x(int dir)
 {
@@ -75,8 +74,6 @@ std::vector<int> Direction::pathToGoal(int rows, int cols,
                                int rowStart, int colStart, int rowGoal, int colGoal,
                                std::function<bool (int, int)> hasObstacleAt) 
 {
-    //int rows = world->height;
-    //int cols = world->width;
     std::map<int, float> distToCells; //distances to the cells from the starting position
     std::map<int, int> previousCells; //for extraction the path
     for (int r = 0; r < rows; ++r) {
@@ -85,7 +82,6 @@ std::vector<int> Direction::pathToGoal(int rows, int cols,
                 distToCells.insert(distToCells.end(), 
                                 std::pair<int, float>(r * cols + c, rows + cols));
             }
-            //world->debug->clearMarkerAt(r, c); //remove old traces
         }
     }
     int idxStart = rowStart * cols + colStart;
@@ -141,31 +137,17 @@ std::vector<int> Direction::pathToGoal(int rows, int cols,
     
     // find the path backwards
     int idxCell = idxGoal;
-    //int nextCell = idxCell;
-
     std::vector<int> path;
 
     while (idxCell != idxStart) {
         path.push_back(idxCell);
-        //int r = Direction::row(idxCell, cols);
-        //int c = Direction::col(idxCell, cols);
-        //world->debug->addMarkerAt(r, c);
-        //nextCell = idxCell;
         std::map<int, int>::iterator idx_prev = previousCells.find(idxCell);
         if (idx_prev != previousCells.end()) {
             idxCell = idx_prev->second;
         } else { //algorithm didnt reached the cell thus something went wrong
-            //std::cout << "Goal wasnt reached\n";
             std::vector<int> zero; // goal wasnt reached
             return zero;
         }
     }
-    /*
-    int colNext = Direction::col(nextCell, cols);
-    int rowNext = Direction::row(nextCell, cols);
-
-    int x = colNext - colStart;
-    int y = rowNext - rowStart;
-    return Direction::direction(x, y);    */
     return path;
 }

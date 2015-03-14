@@ -1,5 +1,4 @@
 #include <functional>
-//#include <world.h>
 #include <vector>
 class Direction
 {
