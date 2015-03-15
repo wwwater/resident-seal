@@ -3,13 +3,10 @@
 #include "fog.h"
 #include "utils.h"
 
-Seal::Seal(World *world, int row, int col, int direction)
+Seal::Seal(World *world, int row, int col, int direction) : 
+    MovingObject(float(col + 0.5), float(row + 0.5), direction)
 {
-    this->x = col + 0.5;
-    this->y = row + 0.5;
-    this->direction = direction;
     this->isMoving = false;
-
     this->cooldown         = 0;
     this->cooldownDuration = 30;
     this->fatigue          = 0;
@@ -35,9 +32,6 @@ void Seal::advance()
         std::max(0, this->fatigue - this->recoveryRate);
     this->cooldown = std::max(0, this->cooldown - 1);
 
-    int rowCurrent = floor(this->y);
-    int colCurrent = floor(this->x);
-
     // 2. Making a decision
     if (this->isAtCellCenter() && this->cooldown == 0) {
         if (this->isMoving) {
@@ -51,17 +45,17 @@ void Seal::advance()
         if (action == SealAction::noop) {
             this->cooldown = this->isMoving ? this->cooldownDuration : 0;
         } else if (action == SealAction::left) {
-            this->direction = Direction::rotate(this->direction, -1);
+            this->rotate(-1);
             this->cooldown = this->cooldownDuration;
             action = this->ai->getAction();
         } else if (action == SealAction::right) {
-            this->direction = Direction::rotate(this->direction, 1);
+            this->rotate(1);
             this->cooldown = this->cooldownDuration;
             action = this->ai->getAction();
         }
 
-        int rowAhead = rowCurrent + Direction::intY(this->direction);
-        int colAhead = colCurrent + Direction::intX(this->direction);
+        int rowAhead = this->rowAhead();
+        int colAhead = this->colAhead();
         bool wayIsClear = !this->world->hasSealAt(rowAhead, colAhead) &&
                           !this->world->hasObstacleAt(rowAhead, colAhead);
 
@@ -77,13 +71,14 @@ void Seal::advance()
 
     // 3. Process results
     if(this->isMoving) {
-        this->x += this->stepSize * Direction::x(this->direction);
-        this->y += this->stepSize * Direction::y(this->direction);
-
+        Cell cellBeforeMovement = this->cell();
+        this->x += this->stepSize * this->dx();
+        this->y += this->stepSize * this->dy();
         // When crossing into a new cell, free the current one.
         // The new cell is already reserved by this seal.
-        if (floor(this->y) != rowCurrent || floor(this->x) != colCurrent) {
-            this->world->putSealAt(NULL, rowCurrent, colCurrent);
+        if (this->cell() != cellBeforeMovement) {
+            this->world->putSealAt(NULL, cellBeforeMovement.row, 
+                                         cellBeforeMovement.col);
         }
     }
 
@@ -92,7 +87,7 @@ void Seal::advance()
 
 void Seal::clearFog()
 {
-    this->world->fog->clearTile(floor(this->y), floor(this->x));
+    this->world->fog->clearTile(this->row(), this->col());
 }
 
 bool Seal::canStepOn(int row, int col)

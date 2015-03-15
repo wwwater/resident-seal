@@ -2,17 +2,14 @@
 #define SEAL_H
 
 #include "seal_AI.h"
+#include "utils.h"
 
 enum class SealAction { go, noop, left, right };
 
-class Seal
+class Seal : public MovingObject
 {
 public:
-    float x;
-    float y;
-    int direction; // [0.. 7]
     World *world;
-
     Seal(World *world, int row, int col, int direction);
     void advance();
     void clearFog();

@@ -1,6 +1,7 @@
 #ifndef SEAL_AI_H
 #define SEAL_AI_H
 
+#include "utils.h"
 #include <vector>
 
 class World;
@@ -13,15 +14,11 @@ public:
     SealAction getAction();
 private:
     bool wantsToMove();
-    int newDirection();
     bool fianceeDetected(bool approach);
-    bool hasGoal(bool approach); 
     World *world;
     Seal *seal;
-    int pathToGoal();
-    std::vector<std::pair<int, int>> path;
-    int rowGoal;
-    int colGoal;
+    std::vector<Cell> path;
+    Cell goal;
     void createGoal();
 };
 

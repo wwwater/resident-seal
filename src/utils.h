@@ -1,21 +1,53 @@
+#ifndef UTILS_H
+#define UTILS_H
+
 #include <functional>
 #include <vector>
-class Direction
+
+class Cell
 {
 public:
-    static float x(int dir);
-    static float y(int dir);
-    static int intX(int dir);
-    static int intY(int dir);
-    static int rotate(int dir, int turns);
-    static int col(int idx, int cols);
-    static int row(int idx, int cols);
-    static int direction(int x, int y);
-    static std::vector<std::pair<int, int>> pathToGoal(int rows, int cols,
-                               int rowStart, int colStart, 
-                               int rowGoal, int colGoal,
+    int row;
+    int col;
+    Cell(int row, int col);
+    std::vector<Cell> neighbors();
+    float distanceToNeighbor(Cell &that);
+    friend bool operator <(Cell const &cell1, Cell const &cell2);
+    friend bool operator ==(Cell const &cell1, Cell const &cell2);
+    friend bool operator !=(Cell const &cell1, Cell const &cell2);
+};
+
+class MovingObject
+{
+public:
+    float x;
+    float y;
+    int direction;
+    int rows;
+    int cols;
+    MovingObject(float x, float y, int dir);
+    int row();
+    int col();
+    Cell cell();
+    float dx();
+    float dy();
+    void rotate(int turns);
+    int rowAhead();
+    int colAhead();
+    Cell nextCell();
+    int directionTo(Cell &cell);
+    int turnDirectionTo(Cell &cell);
+};
+
+
+class Algorithms
+{
+public:
+    static std::vector<Cell> pathToGoal(int rows, int cols,
+                               Cell start, Cell goal,
                                std::function<bool (int, int)> hasObstacleAt);
-    static int turnDirection(int directionIs, int directionToBe);
+
 };
 
 int randint(int min, int max);
+#endif // UTILS_H

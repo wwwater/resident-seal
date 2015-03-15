@@ -1,20 +1,17 @@
 #include "seal_AI.h"
-#include "utils.h"
 #include "world.h"
 
-SealAI::SealAI(World *world, Seal *seal): world(world), seal(seal)
+SealAI::SealAI(World *world, Seal *seal) : 
+    world(world),
+    seal(seal),
+    goal(this->seal->cell())
 {
-    this->rowGoal = int(this->seal->y);
-    this->colGoal = int(this->seal->x);
 }
 
 SealAction SealAI::getAction()
 {
-    int col = int(this->seal->x);
-    int row = int(this->seal->y);
-
     if (this->wantsToMove()) {
-        if (row == this->rowGoal && col == this->colGoal) {
+        if (this->seal->cell() == this->goal) {
             if (this->seal->fatigue > 0) {
                 return SealAction::noop;
             } else {
@@ -22,22 +19,18 @@ SealAction SealAI::getAction()
             }
         }
         if (this->path.size() > 0) {
-            std::pair<int, int> nextCell = this->path.back();
-            int rowNext = nextCell.first;
-            int colNext = nextCell.second;
+            Cell nextCell = this->path.back();
+            int rowNext = nextCell.row;
+            int colNext = nextCell.col;
             if (this->world->hasSealAt(rowNext, colNext)) {
                 for (auto cell: path) {
-                    this->world->debug->clearMarkerAt(cell.first, cell.second);
+                    this->world->debug->clearMarkerAt(cell.row, cell.col);
                 }
                 this->path.clear();
                 return SealAction::noop;
             } else {
-                int direction = Direction::direction(
-                    colNext - col, rowNext - row);
-                int turn = Direction::turnDirection(
-                    this->seal->direction, direction);
-                if (turn == 0) {
-                    // Follow the path
+                int turn = this->seal->turnDirectionTo(nextCell);
+                    if (turn == 0) { // Follow the path
                     this->path.pop_back();
                     return SealAction::go;
                 } else if (turn == 1) { // Rotate to face the path direction.
@@ -46,17 +39,17 @@ SealAction SealAI::getAction()
                 return SealAction::left;
             }
         } else { 
-            this->path = Direction::pathToGoal(
+            this->path = Algorithms::pathToGoal(
                 this->world->height, this->world->width,
-                row, col,
-                this->rowGoal, this->colGoal,
+                this->seal->cell(),
+                this->goal,
                 [this](int row, int col) {
                     return this->world->hasObstacleAt(row, col) ||
                            this->world->hasSealAt(row, col);
                 }
             );
             for (auto cell: path) {
-                this->world->debug->addMarkerAt(cell.first, cell.second);
+                this->world->debug->addMarkerAt(cell.row, cell.col);
             }
             return SealAction::noop;
         }
@@ -75,7 +68,7 @@ bool SealAI::wantsToMove()
     }
     return false;
 } 
-
+/*
 bool SealAI::fianceeDetected(bool approach)
 {
     bool fianceeDetected = false;
@@ -104,27 +97,20 @@ bool SealAI::fianceeDetected(bool approach)
         }
     }
     return fianceeDetected;
-}
-
-bool SealAI::hasGoal(bool approach)
-{
-    return (this->fianceeDetected(approach));
-}
+}*/
 
 void SealAI::createGoal()
 {
     int rows = this->world->height;
     int cols = this->world->width;
-    std::vector<int> availableCells;
+    std::vector<Cell> availableCells;
     for (int row = 0; row < rows; ++ row) {
         for (int col = 0; col < cols; ++col) {
             if (this->seal->canStepOn(row, col)) {
-                availableCells.push_back(row * cols + col);
+                availableCells.push_back(Cell(row, col));
             }    
         }
     }
-    int idxGoal = availableCells[qrand() % availableCells.size()];   
-    this->rowGoal = Direction::row(idxGoal, cols);
-    this->colGoal = Direction::col(idxGoal, cols);
+    this->goal = availableCells[qrand() % availableCells.size()];   
     return;
 }
