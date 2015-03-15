@@ -4,7 +4,8 @@
 SealAI::SealAI(World *world, Seal *seal) : 
     world(world),
     seal(seal),
-    goal(this->seal->cell())
+    goal(this->seal->cell()),
+    sealStrategy(1)
 {
 }
 
@@ -15,7 +16,7 @@ SealAction SealAI::getAction()
             if (this->seal->fatigue > 0) {
                 return SealAction::noop;
             } else {
-                this->createGoal();
+                this->actAccordingStrategy();
             }
         }
         if (this->path.size() > 0) {
@@ -111,4 +112,25 @@ void SealAI::createGoal()
     }
     this->goal = availableCells[qrand() % availableCells.size()];   
     return;
+}
+
+void SealAI::chooseAnotherSealAsGoal()
+{
+    int nSeals = this->world->seals->size();
+    this->goalSeal = (this->world->seals->at(qrand() % nSeals));
+}
+
+void SealAI::updateGoalSealLocation()
+{
+    this->goal = this->goalSeal->cell();
+}
+
+void SealAI::actAccordingStrategy()
+{
+    if (sealStrategy == 0) {
+        this->createGoal();
+    } else if (sealStrategy == 1) {
+        this->chooseAnotherSealAsGoal();
+        this->updateGoalSealLocation();
+    }
 }

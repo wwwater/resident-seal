@@ -187,13 +187,13 @@ std::vector<Cell> Algorithms::pathToGoal(int rows, int cols,
     std::map<Cell, Cell> previousCells; //for extraction the path
     for (int r = 0; r < rows; ++r) {
         for (int c = 0; c < cols; ++c) {
-            if (!hasObstacleAt(Cell(r, c))) {
+            if (!hasObstacleAt(Cell(r, c)) || Cell(r, c) == goal) {
                 distToCells.insert(distToCells.end(),
                                 std::pair<Cell, float>(Cell(r, c), rows + cols));
             }
         }
     }
-
+    
     //indices of cell to visit in the next iteration of the algorithm
     std::set<Cell> cellsToVisit; 
     //indices of cell marked as visited by algorithm

@@ -49,5 +49,5 @@ bool World::hasSealAt(Cell cell)
 
 bool World::hasObstacleAt(Cell cell)
 {
-    return this->terrain->isObstacle(cell.row, cell.col);
+    return this->terrain->isObstacle(cell);
 }

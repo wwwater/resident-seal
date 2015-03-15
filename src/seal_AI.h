@@ -19,7 +19,12 @@ private:
     Seal *seal;
     std::vector<Cell> path;
     Cell goal;
+    Seal *goalSeal;
     void createGoal();
+    void chooseAnotherSealAsGoal();
+    void updateGoalSealLocation();
+    int sealStrategy;
+    void actAccordingStrategy();
 };
 
 #endif //SEAL_AI_H

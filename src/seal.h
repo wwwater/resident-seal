@@ -10,7 +10,7 @@ class Seal : public MovingObject
 {
 public:
     World *world;
-    Seal(World *world, int row, int col, int direction);
+    Seal(World *world, Cell cell, int direction);
     void advance();
     void clearFog();
     bool canStepOn(Cell cell);

@@ -3,8 +3,8 @@
 #include "fog.h"
 #include "utils.h"
 
-Seal::Seal(World *world, int row, int col, int direction) : 
-    MovingObject(float(col + 0.5), float(row + 0.5), direction)
+Seal::Seal(World *world, Cell cell, int direction) : 
+    MovingObject(float(cell.col + 0.5), float(cell.row + 0.5), direction)
 {
     this->isMoving = false;
     this->cooldown         = 0;

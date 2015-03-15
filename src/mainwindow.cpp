@@ -4,6 +4,8 @@
 #include "terrain_view.h"
 #include "fog_view.h"
 #include "seal.h"
+#include "utils.h"
+#include <list>
 
 MainWindow::MainWindow()
 {
@@ -168,26 +170,32 @@ void MainWindow::createWorld()
     terrain->loadObstaclesFromFile(QString("../resources/terrain-obstacles.json"));
     this->world = new World(terrain);
     
-    for (int i = 0, j = 2; i <= 2; i++, j--) {
-        this->world->addSeal(
-            new Seal(
-                this->world,
-                terrain->height / 2 - i,
-                terrain->width / 2 - j,
-                3
-            )
-        );
-        this->world->addSeal(
-            new Seal(
-                this->world,
-                terrain->height / 2 + i,
-                terrain->width / 2 + j,
-                7
-            )
-        );
+    int k = 6; // how many seals one wants
+    int n = 0; // counter of available cells seen so far
+    std::list<Cell> cellsForSeals;
+    for (int row = 0; row < terrain->height; ++ row) {
+        for (int col = 0; col < terrain->width; ++col) {
+            Cell cell = Cell(row, col);
+            if (!this->world->hasObstacleAt(cell)) {
+                ++n;
+                if (n <= k) {
+                    cellsForSeals.push_back(cell);
+                } else {
+                    int r = qrand() % n;
+                    if (r < k) {
+                        auto toErase = cellsForSeals.begin();
+                        std::advance(toErase, r);
+                        cellsForSeals.erase(toErase);
+                        cellsForSeals.push_back(cell);
+                    }
+                }
+            }    
+        }
     }
-    //this->world->addSeal(new Seal(this->world, terrain->height / 2, terrain->width / 2, 0));
 
+    for (Cell cell: cellsForSeals) {
+        this->world->addSeal(new Seal(this->world, cell, qrand() % 8));
+    }
 }
 
 void MainWindow::createWorldView()

@@ -37,12 +37,12 @@ void Terrain::loadObstaclesFromFile(QString filename)
     }
 }
 
-int Terrain::getTile(int row, int column)
+int Terrain::getTile(int row, int col)
 {
-    return this->tiles[row * this->width + column];
+    return this->tiles[row * this->width + col];
 }
 
-bool Terrain::isObstacle(int row, int column)
+bool Terrain::isObstacle(Cell cell)
 {
-    return this->obstacles[this->getTile(row, column)];
+    return this->obstacles[this->getTile(cell.row, cell.col)];
 }

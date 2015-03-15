@@ -2,6 +2,7 @@
 #define TERRAIN_H
 
 #include <QtWidgets>
+#include "utils.h"
 
 class Terrain
 {
@@ -11,8 +12,8 @@ public:
 
     void loadFromFile(QString filename);
     void loadObstaclesFromFile(QString filename);
-    int getTile(int row, int column);
-    bool isObstacle(int row, int column);
+    int getTile(int row, int col);
+    bool isObstacle(Cell cell);
 
 private:
     // Stored in row-major order.
