@@ -2,6 +2,7 @@
 #define DEBUG_H
 
 #include <vector>
+#include "utils.h"
 
 class World;
 class Debug
@@ -13,8 +14,8 @@ public:
     std::vector<int> *markers;
 
     Debug(World *world);
-    void addMarkerAt(int row, int col);
-    void clearMarkerAt(int row, int col);
+    void addMarkerAt(Cell cell);
+    void clearMarkerAt(Cell cell);
 };
 
 #endif // DEBUG_H

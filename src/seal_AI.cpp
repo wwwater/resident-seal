@@ -20,11 +20,9 @@ SealAction SealAI::getAction()
         }
         if (this->path.size() > 0) {
             Cell nextCell = this->path.back();
-            int rowNext = nextCell.row;
-            int colNext = nextCell.col;
-            if (this->world->hasSealAt(rowNext, colNext)) {
+            if (this->world->hasSealAt(nextCell)) {
                 for (auto cell: path) {
-                    this->world->debug->clearMarkerAt(cell.row, cell.col);
+                    this->world->debug->clearMarkerAt(cell);
                 }
                 this->path.clear();
                 return SealAction::noop;
@@ -43,13 +41,13 @@ SealAction SealAI::getAction()
                 this->world->height, this->world->width,
                 this->seal->cell(),
                 this->goal,
-                [this](int row, int col) {
-                    return this->world->hasObstacleAt(row, col) ||
-                           this->world->hasSealAt(row, col);
+                [this](Cell cell) {
+                    return this->world->hasObstacleAt(cell) ||
+                           this->world->hasSealAt(cell);
                 }
             );
             for (auto cell: path) {
-                this->world->debug->addMarkerAt(cell.row, cell.col);
+                this->world->debug->addMarkerAt(cell);
             }
             return SealAction::noop;
         }
@@ -106,7 +104,7 @@ void SealAI::createGoal()
     std::vector<Cell> availableCells;
     for (int row = 0; row < rows; ++ row) {
         for (int col = 0; col < cols; ++col) {
-            if (this->seal->canStepOn(row, col)) {
+            if (this->seal->canStepOn(Cell(row, col))) {
                 availableCells.push_back(Cell(row, col));
             }    
         }

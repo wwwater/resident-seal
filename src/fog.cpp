@@ -10,8 +10,10 @@ Fog::Fog(World *world)
     this->vertices->assign((world->width + 1) * (world->height + 1), 0);
 }
 
-void Fog::clearTile(int row, int col)
+void Fog::clearTile(Cell cell)
 {
+    int row = cell.row;
+    int col = cell.col;
     // Tile at row, col
     this->vertices->at((row + 0) * this->worldWidth + col + 0) = this->condensationTime;
     this->vertices->at((row + 0) * this->worldWidth + col + 1) = this->condensationTime;

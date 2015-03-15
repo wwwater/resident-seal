@@ -9,12 +9,12 @@ Debug::Debug(World *world)
     this->markers->assign(rows * cols, 0);
 }
 
-void Debug::addMarkerAt(int row, int col)
+void Debug::addMarkerAt(Cell cell)
 {
-    this->markers->at(row * this->cols + col) = 1;
+    this->markers->at(cell.row * this->cols + cell.col) = 1;
 }
 
-void Debug::clearMarkerAt(int row, int col)
+void Debug::clearMarkerAt(Cell cell)
 {
-    this->markers->at(row * this->cols + col) = 0;
+    this->markers->at(cell.row * this->cols + cell.col) = 0;
 }

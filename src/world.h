@@ -19,10 +19,10 @@ public:
 
     World(Terrain *terrain);
     void addSeal(Seal *seal);
-    Seal* getSealAt(int row, int col);
-    void putSealAt(Seal *seal, int row, int col);
-    bool hasSealAt(int row, int col);
-    bool hasObstacleAt(int row, int col);
+    Seal* getSealAt(Cell cell);
+    void putSealAt(Seal *seal, Cell cell);
+    bool hasSealAt(Cell cell);
+    bool hasObstacleAt(Cell cell);
     void advance();
 };
 

@@ -54,16 +54,13 @@ void Seal::advance()
             action = this->ai->getAction();
         }
 
-        int rowAhead = this->rowAhead();
-        int colAhead = this->colAhead();
-        bool wayIsClear = !this->world->hasSealAt(rowAhead, colAhead) &&
-                          !this->world->hasObstacleAt(rowAhead, colAhead);
+        bool wayIsClear = this->canStepOn(this->cellAhead());
 
         if (action == SealAction::go && this->fatigue < this->maxFatigue
                                      && wayIsClear) {
             this->isMoving = true;
             this->cooldown = 0;
-            this->world->putSealAt(this, rowAhead, colAhead);
+            this->world->putSealAt(this, this->cellAhead());
         } else {
             this->isMoving = false;
         }
@@ -77,8 +74,7 @@ void Seal::advance()
         // When crossing into a new cell, free the current one.
         // The new cell is already reserved by this seal.
         if (this->cell() != cellBeforeMovement) {
-            this->world->putSealAt(NULL, cellBeforeMovement.row, 
-                                         cellBeforeMovement.col);
+            this->world->putSealAt(NULL, cellBeforeMovement);
         }
     }
 
@@ -87,11 +83,11 @@ void Seal::advance()
 
 void Seal::clearFog()
 {
-    this->world->fog->clearTile(this->row(), this->col());
+    this->world->fog->clearTile(this->cell());
 }
 
-bool Seal::canStepOn(int row, int col)
+bool Seal::canStepOn(Cell cell)
 {
-    return (!this->world->hasObstacleAt(row, col)
-        && !this->world->hasSealAt(row, col));
+    return (!this->world->hasObstacleAt(cell)
+        && !this->world->hasSealAt(cell));
 }

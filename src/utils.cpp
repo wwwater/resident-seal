@@ -144,7 +144,7 @@ int MovingObject::colAhead()
     }
 }
 
-Cell MovingObject::nextCell()
+Cell MovingObject::cellAhead()
 {
     return Cell(this->rowAhead(), this->colAhead());
 }
@@ -180,14 +180,14 @@ Cell MovingObject::cell()
 
 std::vector<Cell> Algorithms::pathToGoal(int rows, int cols, 
                                Cell start, Cell goal,
-                               std::function<bool (int, int)> hasObstacleAt) 
+                               std::function<bool (Cell)> hasObstacleAt) 
 {
     //distances to the cells from the starting position
     std::map<Cell, float> distToCells;
     std::map<Cell, Cell> previousCells; //for extraction the path
     for (int r = 0; r < rows; ++r) {
         for (int c = 0; c < cols; ++c) {
-            if (!hasObstacleAt(r, c)) {
+            if (!hasObstacleAt(Cell(r, c))) {
                 distToCells.insert(distToCells.end(),
                                 std::pair<Cell, float>(Cell(r, c), rows + cols));
             }

@@ -23,8 +23,6 @@ public:
     float x;
     float y;
     int direction;
-    int rows;
-    int cols;
     MovingObject(float x, float y, int dir);
     int row();
     int col();
@@ -34,7 +32,7 @@ public:
     void rotate(int turns);
     int rowAhead();
     int colAhead();
-    Cell nextCell();
+    Cell cellAhead();
     int directionTo(Cell &cell);
     int turnDirectionTo(Cell &cell);
 };
@@ -45,7 +43,7 @@ class Algorithms
 public:
     static std::vector<Cell> pathToGoal(int rows, int cols,
                                Cell start, Cell goal,
-                               std::function<bool (int, int)> hasObstacleAt);
+                               std::function<bool (Cell)> hasObstacleAt);
 
 };
 

@@ -15,7 +15,7 @@ World::World(Terrain *terrain)
 void World::addSeal(Seal *seal)
 {
     this->seals->push_back(seal);
-    this->putSealAt(seal, floor(seal->y), floor(seal->x));
+    this->putSealAt(seal, seal->cell());
 }
 
 void World::advance()
@@ -26,28 +26,28 @@ void World::advance()
     }
 }
 
-Seal* World::getSealAt(int row, int col)
+Seal* World::getSealAt(Cell cell)
 {
-    return this->sealsByLocation->at(row * this->width + col);
+    return this->sealsByLocation->at(cell.row * this->width + cell.col);
 }
 
-void World::putSealAt(Seal *seal, int row, int col)
+void World::putSealAt(Seal *seal, Cell cell)
 {
-    this->sealsByLocation->at(row * this->width + col) = seal;
+    this->sealsByLocation->at(cell.row * this->width + cell.col) = seal;
 
     if (seal == NULL) {
-        this->debug->clearMarkerAt(row, col);
+        this->debug->clearMarkerAt(cell);
     } else {
-        this->debug->addMarkerAt(row, col);
+        this->debug->addMarkerAt(cell);
     }
 }
 
-bool World::hasSealAt(int row, int col)
+bool World::hasSealAt(Cell cell)
 {
-    return this->getSealAt(row, col) != NULL;
+    return this->getSealAt(cell) != NULL;
 }
 
-bool World::hasObstacleAt(int row, int col)
+bool World::hasObstacleAt(Cell cell)
 {
-    return this->terrain->isObstacle(row, col);
+    return this->terrain->isObstacle(cell.row, cell.col);
 }

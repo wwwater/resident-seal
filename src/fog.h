@@ -2,6 +2,7 @@
 #define FOG_H
 
 #include <vector>
+#include "utils.h"
 
 class World;
 class Fog
@@ -13,7 +14,7 @@ public:
     std::vector<int> *vertices;
 
     Fog(World *world);
-    void clearTile(int row, int col);
+    void clearTile(Cell cell);
     void advance();
 
 private:
